@@ -2,16 +2,8 @@ import parserutil.ObjectsParser;
 import springies.Springies;
 
 
-public class PhysicalElementCreater {
+public class PhysicalElementCreater{
 	
 	Node = 
 	
-}
-	
-	
-	
-	
-	
-	
-
 }

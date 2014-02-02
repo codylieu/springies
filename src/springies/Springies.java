@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.w3c.dom.Node;
+import jboxGlue.Gravity;
 import jboxGlue.PhysicalObject;
 import jboxGlue.PhysicalObjectCircle;
 import jboxGlue.PhysicalObjectFixedMass;
@@ -56,6 +57,7 @@ public class Springies extends JGEngine
 		WorldManager.getWorld().setGravity(new Vec2(0.0f, 0.1f));
 		addBall();
 		addWalls();
+		PhysicalObject fixed = new PhysicalObjectFixedMass("ball", 1, JGColor.yellow, 10, 0, displayWidth()/1.2, displayHeight()/1.2);
 	}
 
 	public void addBall ()
@@ -69,6 +71,7 @@ public class Springies extends JGEngine
 		
 		
 		ball.setForce(8000, -10000);
+
 	}
 	
 	
