@@ -40,7 +40,7 @@ public class Main
         // add our user interface components
         frame.getContentPane().add(sp, BorderLayout.CENTER);
         frame.getContentPane().add(jb, BorderLayout.SOUTH);
-        // display them
+        // display them 
         frame.pack();
         frame.setVisible(true);
     }
