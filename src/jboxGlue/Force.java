@@ -1,5 +1,5 @@
 package jboxGlue;
 
-public class Force {
+public class Force extends JGOBject {
 
 }

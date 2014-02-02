@@ -1,6 +1,7 @@
 package parserutil;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -14,11 +15,14 @@ import com.sun.org.apache.xerces.internal.parsers.DOMParser;
 
 public class ObjectsParser extends Parser{
 
-	public void createMasses(Node environment) {
+	public String[][] createMasses(Node model) {
+//		final ArrayList<String[]> massvalues = new ArrayList<String[]>();
+		Node nodes = getNode("nodes", model.getChildNodes());
 
-		ArrayList<Node> masses = getAllNodes("mass", environment.getChildNodes());
+		ArrayList<Node> masses = getAllNodes("mass", nodes.getChildNodes());
+		String[][] massvalues = new String[masses.size()][5];
 		for (int i = 0; i <masses.size(); i++) {
-
+			
 
 			String id = getNodeAttr("id", masses.get(i));
 			double x = Double.parseDouble(getNodeAttr("x", masses.get(i)));
@@ -29,24 +33,32 @@ public class ObjectsParser extends Parser{
 			if (getNodeAttr("vx", masses.get(i)) != "") 
 				vx = Double.parseDouble(getNodeAttr("vx", masses.get(i)));
 
-
 			if (getNodeAttr("vy", masses.get(i)) != "") 	
 				vy = Double.parseDouble(getNodeAttr("vy", masses.get(i)));
+			
+			String[] massattributes = {id, Double.toString(x), Double.toString(y), Double.toString(vx), Double.toString(vy)};
 
-
+//			massvalues.add(massattributes);
+			
+			massvalues[i] = massattributes;
+			
 			//PhysicalObjectMass mass = new PhysicalObjectMass(id, x, y, z, vx, vy) 
-			System.out.println(id  +" " +  x  +" " +  y + " " + vx + " " + vy);
-
+			System.out.println(id +" " +  x  +" " +  y + " " + vx + " " + vy);
+			System.out.println(massvalues[0][0] + "Test");
 		}
+		
+		return massvalues;
 
 
 
 	}
 
-	public void createSprings(Node environment) {
-		//In the data file, this element is indicated by the keyword spring followed by the id of its two masses, a rest length, an
-		//d a K springy-ness constant. If K is not given, the default value should be 1.
-		ArrayList<Node> springs = getAllNodes("spring", environment.getChildNodes());
+	public String[][] createSprings(Node model) {
+		Node links = getNode("links", model.getChildNodes());
+		
+		
+		ArrayList<Node> springs = getAllNodes("spring", links.getChildNodes());
+		String[][] springvalues = new String[springs.size()][4];
 		for (int i = 0; i < springs.size(); i++) {
 
 
@@ -58,14 +70,21 @@ public class ObjectsParser extends Parser{
 				k = Double.parseDouble(getNodeAttr("constant", springs.get(i)));
 
 
-
+			String[] springattributes = {a, b, Double.toString(restlength), Double.toString(k)};
+			springvalues[i] = springattributes;
 			//PhysicalObjectSpring spring = new PhysicalObjectSpring(a, b, restlength, k) 
 			System.out.println(a  +" " +  b +" " +  restlength  + " " + k);
 		}
+		
+		return springvalues;
+			
 	}
 
-	public void createFixedMasses(Node environment) {
-		ArrayList<Node> fixeds = getAllNodes("spring", environment.getChildNodes());
+	public String[][]  createFixedMasses(Node model) {
+		Node nodes = getNode("nodes", model.getChildNodes());
+		
+		ArrayList<Node> fixeds = getAllNodes("spring", nodes.getChildNodes());
+		String[][] fmvalues = new String[fixeds.size()][3];
 		for (int i = 0; i < fixeds.size(); i++) {
 
 
@@ -73,14 +92,21 @@ public class ObjectsParser extends Parser{
 			double x = Double.parseDouble(getNodeAttr("x", fixeds.get(i)));
 			double y = Double.parseDouble(getNodeAttr("y", fixeds.get(i))); 
 			//PhysicalObjectFixedMass fixed = new PhysicalObjectFixedMass(id, x, y) 
+			String[] fmattributes = {Double.toString(x), Double.toString(y)};
+			fmvalues[i] = fmattributes;
 			System.out.println(id  +" " +  x  +" " +  y);
 		}
+		
+		return fmvalues;
 
 	}
 
-	public void createMuscles(Node environment) {
+	public String[][] createMuscles(Node model) {
+		Node links = getNode("links", model.getChildNodes());
+		
 
-		ArrayList<Node> muscles = getAllNodes("spring", environment.getChildNodes());
+		ArrayList<Node> muscles = getAllNodes("spring", links.getChildNodes());
+		String [][] musclevalues = new String[muscles.size()][4];
 		for (int i = 0; i < muscles.size(); i++) {
 
 
@@ -90,54 +116,57 @@ public class ObjectsParser extends Parser{
 			double k = 0;
 			if (getNodeAttr("constant", muscles.get(i)) != "") 
 				k = Double.parseDouble(getNodeAttr("constant", muscles.get(i)));
-
-
+			
+			String[] springattributes = {a, b, Double.toString(restlength), Double.toString(k)};
+			musclevalues[i] = springattributes;
 
 			//PhysicalObjectSpring spring = new PhysicalObjectSpring(a, b, restlength, k) 
 			System.out.println(a  +" " +  b +" " +  restlength  + " " + k);
 		}
+		return musclevalues;
 	}
 
+	public void createNodes(Node model) {
+		Node nodes = getNode("nodes", model.getChildNodes());
+		createMasses(nodes);
+		createFixedMasses(nodes);
+		
+	}
+	public void createLinks(Node model) {
+		Node links = getNode("links", model.getChildNodes());
+		createMuscles(links);
+		createSprings(links);
 
+	}
 
-	public void parse(String filename) {
+	public Node parse(String filename) {
 		try {
 			DOMParser parser = new DOMParser();
 			parser.parse(filename);
 			Document doc = parser.getDocument();
 
-			
-
 			System.out.println("root of xml file ->" + doc.getDocumentElement().getNodeName());
-
-
-			//get masses, create them
-			//get springs, create them
-			//get muscles, create them
 
 			NodeList root = doc.getChildNodes();
 			Node model = getNode("model", root);
 
-			Node nodes = getNode("nodes", model.getChildNodes());
-			createMasses(nodes);
-			createFixedMasses(nodes);
-			
-			
-			Node links = getNode("links", model.getChildNodes());
-			createMuscles(links);
-			createSprings(links);
-
-
-
+//			Node nodes = getNode("nodes", model.getChildNodes());
+//			createMasses(model);
+//			createFixedMasses(model);
+//
+//			Node links = getNode("links", model.getChildNodes());
+//			createMuscles(model);
+//			createSprings(model);
+//			
+			return model;
 
 		} catch (Exception ex) {
 
 			ex.printStackTrace();
 
 		}		
-
-
-
+		return null;
+		
 
 	}
 

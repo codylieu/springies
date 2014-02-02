@@ -1,16 +1,22 @@
 package springies;
+import java.util.ArrayList;
+import java.util.HashMap;
 
+import org.w3c.dom.Node;
 import jboxGlue.PhysicalObject;
 import jboxGlue.PhysicalObjectCircle;
 import jboxGlue.PhysicalObjectFixedMass;
 import jboxGlue.PhysicalObjectMass;
 import jboxGlue.PhysicalObjectRect;
+import jboxGlue.Spring;
 import jboxGlue.WorldManager;
 import jgame.JGColor;
 import jgame.JGObject;
 import jgame.platform.JGEngine;
 
 import org.jbox2d.common.Vec2;
+
+import parserutil.ObjectsParser;
 
 
 @SuppressWarnings("serial")
@@ -56,9 +62,16 @@ public class Springies extends JGEngine
 	{
 		// add a bouncy ball
 		// NOTE: you could make this into a separate class, but I'm lazy
-		PhysicalObject ball = new PhysicalObjectMass("ball", 1, JGColor.yellow, 10, 5, displayWidth()/2, displayHeight()/2,0,0);
+		PhysicalObjectMass ball = new PhysicalObjectMass("ball", 1, JGColor.yellow, 10, 5, displayWidth()/2, displayHeight()/2,0,0);
+		PhysicalObjectMass ball2 = new PhysicalObjectMass("ball2", 1, JGColor.yellow, 10, 5, displayWidth()/2-50.0, displayHeight()/2-50.0, 0,0);
+		Spring springlala = new Spring("spring", 9, JGColor.yellow);
+		springlala.connect(ball, ball2);
+		
+		
 		ball.setForce(8000, -10000);
 	}
+	
+	
 
 	private void addWalls ()
 	{
@@ -81,7 +94,63 @@ public class Springies extends JGEngine
 				WALL_THICKNESS, WALL_HEIGHT);
 		wall.setPos(displayWidth() - WALL_MARGIN, displayHeight() / 2);
 	}
+	
+	public HashMap<String, PhysicalObject> createMasses(String[][] masses) {
+		HashMap<String, PhysicalObject> allmasses = new HashMap<String, PhysicalObject>();
+		for (int i = 0; i< masses.length; i++) {
+			String[] currmass = masses[i];
+			String id = currmass[0];
+            int collisionId = 10;
+            JGColor color = JGColor.green;
+            double radius = 10;
+            double mass = 5;
+            double x = Double.parseDouble(currmass[1]);
+            double y = Double.parseDouble(currmass[2]);
+            double vx = Double.parseDouble(currmass[3]);
+            double vy = Double.parseDouble(currmass[4]);
+            System.out.println("creatednewmass");
+			PhysicalObject newmass = new PhysicalObjectMass(id, collisionId, color, radius, mass, x, y, vx, vy);
+			allmasses.put(id, newmass);
+			
+			
+		}
+		System.out.println(allmasses.toString());
+		return allmasses; 
+		
+	}
+	
+	public void createSprings(String[][] springs, HashMap<String, PhysicalObject> allmasses) {
+		for (int i = 0; i< springs.length; i++) {
+			String[] currspring = springs[i];
+			Spring spring = new Spring("spring", 0, JGColor.yellow);
+			spring.connect((PhysicalObjectMass)allmasses.get(currspring[0]), (PhysicalObjectMass) allmasses.get(currspring[1]));
+			System.out.println("connected " + currspring[0] + " " +currspring[1]);
+			
+		}
+		
+	}
+	
+	
+	public void createPhysicalElements( ) {
+		
+		ObjectsParser elements = new ObjectsParser();
+		Node doc = elements.parse("assets/jello.xml");
+		System.out.println(doc.toString());
 
+		String[][] masses = elements.createMasses(doc);
+		HashMap<String, PhysicalObject> allmasses = createMasses(masses);
+		
+		System.out.println(masses[0][0] + "TEST");
+		
+		
+		//String [][] fmasses = elements.createFixedMasses(doc);
+		//createFMasses(fmasses);
+		String [][]springs = elements.createSprings(doc);
+		createSprings(springs, allmasses);
+		//String [][] muscles = elements.createMuscles(doc);
+		//createMuscles(muscles);
+	}
+	
 	@Override
 	public void doFrame ()
 	{
