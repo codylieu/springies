@@ -8,17 +8,10 @@ import org.w3c.dom.NodeList;
 
 
 public class ObjectsParser {
-public static void main(String args[]) {
-try {
-	
-	
-	
-} catch (Exception ex) {
-	
-	ex.printStackTrace();
-	
-}		
-}
-
-
+	public static void main(String args[]) {
+		try {
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}		
+	}
 }
