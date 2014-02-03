@@ -1,4 +1,5 @@
 package springies;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -16,12 +17,19 @@ import jgame.platform.JGEngine;
 
 import org.jbox2d.common.Vec2;
 
+import parserutil.EnvironmentParser;
 import parserutil.ObjectsParser;
 
 
 @SuppressWarnings("serial")
 public class Springies extends JGEngine
+
 {
+	private double [] gravityvals;
+	private double viscositymagnitude;
+	private double [] centermass;
+	private double[][] wallvals;
+	
 	public Springies ()
 	{
 		// set the window size
@@ -52,10 +60,13 @@ public class Springies extends JGEngine
 		//   game coordinates have y pointing up
 		// so gravity is up in world coords and down in game coords
 		// so set all directions (e.g., forces, velocities) in world coords
+		getEnvironment("assets/environment.xml");
+		System.out.println("VISCOSITY MAGNITUDE: " + viscositymagnitude);
 		WorldManager.initWorld(this);
 		WorldManager.getWorld().setGravity(new Vec2(0.0f, 0.1f));
 		addBall();
 		addWalls();
+		createPhysicalElements();
 	}
 
 	public void addBall ()
@@ -64,7 +75,7 @@ public class Springies extends JGEngine
 		// NOTE: you could make this into a separate class, but I'm lazy
 		PhysicalObjectMass ball = new PhysicalObjectMass("ball", 1, JGColor.yellow, 10, 5, displayWidth()/2, displayHeight()/2,0,0);
 		PhysicalObjectMass ball2 = new PhysicalObjectMass("ball2", 1, JGColor.yellow, 10, 5, displayWidth()/2-50.0, displayHeight()/2-50.0, 0,0);
-		Spring springlala = new Spring("spring", 9, JGColor.yellow);
+		Spring springlala = new Spring("spring", 10, JGColor.yellow);
 		springlala.connect(ball, ball2);
 		
 		
@@ -102,7 +113,7 @@ public class Springies extends JGEngine
 			String id = currmass[0];
             int collisionId = 10;
             JGColor color = JGColor.green;
-            double radius = 10;
+            double radius = 3;
             double mass = 5;
             double x = Double.parseDouble(currmass[1]);
             double y = Double.parseDouble(currmass[2]);
@@ -122,7 +133,7 @@ public class Springies extends JGEngine
 	public void createSprings(String[][] springs, HashMap<String, PhysicalObject> allmasses) {
 		for (int i = 0; i< springs.length; i++) {
 			String[] currspring = springs[i];
-			Spring spring = new Spring("spring", 0, JGColor.yellow);
+			Spring spring = new Spring("spring", 10, JGColor.yellow);
 			spring.connect((PhysicalObjectMass)allmasses.get(currspring[0]), (PhysicalObjectMass) allmasses.get(currspring[1]));
 			System.out.println("connected " + currspring[0] + " " +currspring[1]);
 			
@@ -139,6 +150,7 @@ public class Springies extends JGEngine
 
 		String[][] masses = elements.createMasses(doc);
 		HashMap<String, PhysicalObject> allmasses = createMasses(masses);
+		allmasses.toString();
 		
 		System.out.println(masses[0][0] + "TEST");
 		
@@ -147,9 +159,23 @@ public class Springies extends JGEngine
 		//createFMasses(fmasses);
 		String [][]springs = elements.createSprings(doc);
 		createSprings(springs, allmasses);
+		
 		//String [][] muscles = elements.createMuscles(doc);
 		//createMuscles(muscles);
 	}
+	
+	public void getEnvironment(String filename) {
+		
+		EnvironmentParser environment = new EnvironmentParser();
+		Node environ = environment.parse(filename);
+		gravityvals = environment.getGravity(environ);
+		viscositymagnitude = environment.getViscosity(environ);
+		centermass = environment.getCenterMass(environ);
+		wallvals = environment.getWalls(environ);
+		
+	}
+	
+	
 	
 	@Override
 	public void doFrame ()

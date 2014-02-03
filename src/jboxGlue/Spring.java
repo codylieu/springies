@@ -11,16 +11,16 @@ public class Spring extends PhysicalObject {
 	public Spring(String name, int collisionId, JGColor color) {
 		super(name, collisionId, color);
 		
-		
-		// TODO Auto-generated constructor stub
 	}
 
-	
-
-	
 	public void connect(PhysicalObjectMass mass1, PhysicalObjectMass mass2) {
 		m1 = mass1;
 		m2 = mass2;
+	}
+	
+	@Override 
+	public void move() {
+		
 	}
 	
 	@Override

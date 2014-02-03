@@ -64,7 +64,9 @@ public class ObjectsParser extends Parser{
 
 			String a = getNodeAttr("a", springs.get(i));
 			String b = getNodeAttr("b", springs.get(i));
-			double restlength = Double.parseDouble(getNodeAttr("restlength", springs.get(i))); 
+			double restlength = 50.0;
+			if (getNodeAttr("restlength", springs.get(i)) != "")
+				restlength = Double.parseDouble(getNodeAttr("restlength", springs.get(i))); 
 			double k = 0;
 			if (getNodeAttr("constant", springs.get(i)) != "") 
 				k = Double.parseDouble(getNodeAttr("constant", springs.get(i)));
