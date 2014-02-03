@@ -8,10 +8,11 @@ import org.jbox2d.common.Vec2;
 
 import jboxGlue.PhysicalObjectRect;
 
-
 public class PhysicalObjectMass extends PhysicalObject
 {
 	private double myRadius;
+	public double myMass;
+
 
 	public PhysicalObjectMass (String id,
 			int collisionId,
@@ -41,10 +42,25 @@ public class PhysicalObjectMass extends PhysicalObject
 		init(radius, mass, x, y, vx, vy);
 	}
 
+	public void setGravity(double mass, double direction, double magnitude){
+		double forceNet = mass * magnitude;
+		double forceX = forceNet * Math.cos((direction*Math.PI)/180);
+		double forceY = forceNet * Math.sin((direction*Math.PI)/180);
+		setForce(forceX, forceY);
+	}
+
+	public void setViscosity(double magnitude){
+		Vec2 velocity = myBody.getLinearVelocity();
+		velocity.x *= magnitude;
+		velocity.y *= magnitude;
+		myBody.setLinearVelocity(velocity);
+	}
+
 	private void init (double radius, double mass, double x, double y, double vx, double vy)
 	{
 		// save arguments
 		myRadius = radius;
+		myMass = mass;
 		int intRadius = (int)radius;
 		// make it a circle
 		CircleDef shape = new CircleDef();
@@ -53,14 +69,15 @@ public class PhysicalObjectMass extends PhysicalObject
 		createBody(shape);
 		setBBox(-intRadius, -intRadius, 2 * intRadius, 2 * intRadius);
 		setPos(x, y);
-		//				setSpeed(vx, vy);
-		setForce(vx, vy);
-	}
-	
-//	public void move(){
-//		
-//	}
 
+		Vec2 velocity = myBody.getLinearVelocity();
+		velocity.x = 0.0f;
+		velocity.y = 0.0f;
+		velocity.x += vx;
+		velocity.y += vy;
+		myBody.setLinearVelocity(velocity);
+
+	}
 
 	public void hit (JGObject other)
 	{

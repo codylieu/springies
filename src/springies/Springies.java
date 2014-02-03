@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.w3c.dom.Node;
-import jboxGlue.Gravity;
 import jboxGlue.PhysicalObject;
 import jboxGlue.PhysicalObjectCircle;
 import jboxGlue.PhysicalObjectFixedMass;
@@ -64,17 +63,23 @@ public class Springies extends JGEngine
 	{
 		// add a bouncy ball
 		// NOTE: you could make this into a separate class, but I'm lazy
-		PhysicalObjectMass ball = new PhysicalObjectMass("ball", 1, JGColor.yellow, 10, 5, displayWidth()/2, displayHeight()/2,0,0);
-		PhysicalObjectMass ball2 = new PhysicalObjectMass("ball2", 1, JGColor.yellow, 10, 5, displayWidth()/2-50.0, displayHeight()/2-50.0, 0,0);
-		Spring springlala = new Spring("spring", 9, JGColor.yellow);
-		springlala.connect(ball, ball2);
+//		PhysicalObjectMass ball = new PhysicalObjectMass("ball", 1, JGColor.yellow, 10, 5, displayWidth()/2, displayHeight()/2,1000,1000);
+//		PhysicalObjectMass ball2 = new PhysicalObjectMass("ball2", 1, JGColor.yellow, 10, 5, displayWidth()/2-50.0, displayHeight()/2-50.0, 0,0);
+//		Spring springlala = new Spring("spring", 9, JGColor.yellow);
+//		springlala.connect(ball, ball2);
 		
-		
-		ball.setForce(8000, -10000);
+		PhysicalObjectMass m1 = new PhysicalObjectMass("ball", 1, JGColor.red, 10, 5, displayWidth()/2, displayHeight()/2,0,0);
+		PhysicalObjectMass m2 = new PhysicalObjectMass("ball2", 1, JGColor.yellow, 10, 5, displayWidth()/2-50, displayHeight()/2-50, 0,0);
+		PhysicalObjectMass m3 = new PhysicalObjectMass("ball3", 1, JGColor.blue, 10, 5, displayWidth()/2-100, displayHeight()/2-100, 0, 0);
+		Spring temp = new Spring("spring", 0, JGColor.red);
+		temp.connect(m1, m2);
+		Spring temp2 = new Spring("spring", 0, JGColor.blue);
+		temp2.connect(m1, m3);
+		m1.setGravity(m1.myMass, 90, -10000);
+		m2.setGravity(m2.myMass, 0, 10000);
+		m3.setGravity(m3.myMass, 90, -10000);
 
 	}
-	
-	
 
 	private void addWalls ()
 	{
@@ -137,7 +142,7 @@ public class Springies extends JGEngine
 	public void createPhysicalElements( ) {
 		
 		ObjectsParser elements = new ObjectsParser();
-		Node doc = elements.parse("assets/jello.xml");
+		Node doc = elements.parse("assets/ball.xml");
 		System.out.println(doc.toString());
 
 		String[][] masses = elements.createMasses(doc);

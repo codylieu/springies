@@ -23,6 +23,16 @@ public class Spring extends PhysicalObject {
 		m2 = mass2;
 	}
 	
+	public void calculateSpringForce(double x1, double y1, double x2, double y2, double k, double restLength){
+		double totalDist = Math.sqrt(Math.pow(x2-x1, 2) + Math.pow(y2-y1, 2));
+		double xVec = x2-x1; // x vector pointing FROM mass 1 TO mass 2
+		double yVec = y2-y1; // y vector pointing FROM mass 1 TO mass 2
+		double forceX = (k * (totalDist - restLength) * xVec)/totalDist;
+		double forceY = (k * (totalDist - restLength) * yVec)/totalDist;
+		m1.setForce(forceX, forceY);
+		m2.setForce(-forceX, -forceY);
+	}
+	
 	@Override
     public void paintShape()
     {

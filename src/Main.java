@@ -40,6 +40,7 @@ public class Main
         JFrame frame = new JFrame(TITLE);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // add our user interface components
+        
         frame.getContentPane().add(sp, BorderLayout.CENTER);
         frame.getContentPane().add(jb, BorderLayout.SOUTH);
         // display them 
