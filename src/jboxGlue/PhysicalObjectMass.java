@@ -78,6 +78,8 @@ public class PhysicalObjectMass extends PhysicalObject
 		myBody.setLinearVelocity(velocity);
 
 	}
+	
+	 
 
 	public void hit (JGObject other)
 	{

@@ -6,6 +6,8 @@ import jgame.JGObject;
 public class Spring extends PhysicalObject {
 	private PhysicalObjectMass m1;
 	private PhysicalObjectMass m2;
+	private double myrestlength;
+	private double myk;
 	
 	
 	public Spring(String name, int collisionId, JGColor color) {
@@ -16,8 +18,9 @@ public class Spring extends PhysicalObject {
 	public void connect(PhysicalObjectMass mass1, PhysicalObjectMass mass2) {
 		m1 = mass1;
 		m2 = mass2;
+		
 	}
-	
+
 
 	public void calculateSpringForce(double x1, double y1, double x2, double y2, double k, double restLength){
 		double totalDist = Math.sqrt(Math.pow(x2-x1, 2) + Math.pow(y2-y1, 2));
@@ -27,7 +30,6 @@ public class Spring extends PhysicalObject {
 		double forceY = (k * (totalDist - restLength) * yVec)/totalDist;
 		m1.setForce(forceX, forceY);
 		m2.setForce(-forceX, -forceY);
-
 	}
 	
 	@Override

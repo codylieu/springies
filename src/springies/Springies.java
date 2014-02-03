@@ -2,6 +2,7 @@ package springies;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import org.w3c.dom.Node;
 import jboxGlue.PhysicalObject;
@@ -119,8 +120,8 @@ public class Springies extends JGEngine
 		wall.setPos(displayWidth() - WALL_MARGIN, displayHeight() / 2);
 	}
 	
-	public HashMap<String, PhysicalObject> createMasses(String[][] masses) {
-		HashMap<String, PhysicalObject> allmasses = new HashMap<String, PhysicalObject>();
+	public HashMap<String, PhysicalObjectMass> createMasses(String[][] masses) {
+		HashMap<String, PhysicalObjectMass> allmasses = new HashMap<String, PhysicalObjectMass>();
 		for (int i = 0; i< masses.length; i++) {
 			String[] currmass = masses[i];
 			String id = currmass[0];
@@ -133,7 +134,7 @@ public class Springies extends JGEngine
             double vx = Double.parseDouble(currmass[3]);
             double vy = Double.parseDouble(currmass[4]);
             System.out.println("creatednewmass");
-			PhysicalObject newmass = new PhysicalObjectMass(id, collisionId, color, radius, mass, x, y, vx, vy);
+			PhysicalObjectMass newmass = new PhysicalObjectMass(id, collisionId, color, radius, mass, x, y, vx, vy);
 			allmasses.put(id, newmass);
 			
 			
@@ -143,17 +144,31 @@ public class Springies extends JGEngine
 		
 	}
 	
-	public void createSprings(String[][] springs, HashMap<String, PhysicalObject> allmasses) {
+	
+	public void createSprings(String[][] springs, HashMap<String, PhysicalObjectMass> allmasses) {
 		for (int i = 0; i< springs.length; i++) {
 			String[] currspring = springs[i];
 			Spring spring = new Spring("spring", 10, JGColor.yellow);
-			spring.connect((PhysicalObjectMass)allmasses.get(currspring[0]), (PhysicalObjectMass) allmasses.get(currspring[1]));
+			spring.connect(allmasses.get(currspring[0]),  allmasses.get(currspring[1]));
 			System.out.println("connected " + currspring[0] + " " +currspring[1]);
 			
 		}
 		
 	}
 	
+//	public ArrayList<ArrayList<PhysicalObjectMass>> findNetworks(String[][] springs, HashMap<String, PhysicalObject> allmasses) {
+//		ArrayList<PhysicalObjectMass> network = new ArrayList<PhysicalObjectMass>();
+//		
+//		for (int i = 0; i<springs.length; i++) {
+//			String[] currspring = springs[i];
+//			PhysicalObjectMass currmass = (PhysicalObjectMass)allmasses.get(i);
+//		}
+//		
+//		return null;
+//		
+//		
+//	}
+//	
 	
 	public void createPhysicalElements( ) {
 		
@@ -162,7 +177,7 @@ public class Springies extends JGEngine
 		System.out.println(doc.toString());
 
 		String[][] masses = elements.createMasses(doc);
-		HashMap<String, PhysicalObject> allmasses = createMasses(masses);
+		HashMap<String, PhysicalObjectMass> allmasses = createMasses(masses);
 		allmasses.toString();
 		
 		System.out.println(masses[0][0] + "TEST");
