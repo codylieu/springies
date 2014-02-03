@@ -20,13 +20,16 @@ public class ObjectsParser extends Parser{
 		Node nodes = getNode("nodes", model.getChildNodes());
 
 		ArrayList<Node> masses = getAllNodes("mass", nodes.getChildNodes());
-		String[][] massvalues = new String[masses.size()][5];
+		String[][] massvalues = new String[masses.size()][6];
 		for (int i = 0; i <masses.size(); i++) {
 			
 
 			String id = getNodeAttr("id", masses.get(i));
-			double x = Double.parseDouble(getNodeAttr("x", masses.get(i)));
-			double y = Double.parseDouble(getNodeAttr("y", masses.get(i))); 
+			double x = Double.parseDouble(getNodeAttr("x", masses.get(i))) ;
+			double y = Double.parseDouble(getNodeAttr("y", masses.get(i)))-200;
+			double mass = 1;
+			if (getNodeAttr("mass", masses.get(i)) != "")
+				mass = Double.parseDouble(getNodeAttr("mass", masses.get(i)));
 
 			double vx = 0;
 			double vy = 0;
@@ -36,7 +39,7 @@ public class ObjectsParser extends Parser{
 			if (getNodeAttr("vy", masses.get(i)) != "") 	
 				vy = Double.parseDouble(getNodeAttr("vy", masses.get(i)));
 			
-			String[] massattributes = {id, Double.toString(x), Double.toString(y), Double.toString(vx), Double.toString(vy)};
+			String[] massattributes = {id, Double.toString(x), Double.toString(y), Double.toString(mass), Double.toString(vx), Double.toString(vy)};
 
 //			massvalues.add(massattributes);
 			
