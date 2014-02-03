@@ -53,11 +53,27 @@ public class PhysicalObjectMass extends PhysicalObject
 		setForce(forceX, forceY);
 	}
 
-	public void setViscosity(double magnitude){
+	public Vec2 getVelocity() {
 		Vec2 velocity = myBody.getLinearVelocity();
-		velocity.x *= magnitude;
-		velocity.y *= magnitude;
-		myBody.setLinearVelocity(velocity);
+		return velocity;
+	}
+
+	private void initViscosity(){
+		myBody.setLinearVelocity(Viscosity.setViscosity(this, 0.8));
+	}
+
+	public void move(){
+		// if the JGame object was deleted, remove the physical object too
+		if (myBody.m_world != WorldManager.getWorld()) {
+			remove();
+			return;
+		}
+		// copy the position and rotation from the JBox world to the JGame world
+		Vec2 position = myBody.getPosition();
+		x = position.x;
+		y = position.y;
+		myRotation = -myBody.getAngle();
+		initViscosity();
 	}
 
 	private void init (double radius, double mass, double x, double y, double vx, double vy)
@@ -83,7 +99,10 @@ public class PhysicalObjectMass extends PhysicalObject
 		velocity.y += vy;
 		myBody.setLinearVelocity(velocity);
 
+
 	}
+
+
 
 	public void hit (JGObject other)
 	{

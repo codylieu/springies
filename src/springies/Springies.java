@@ -2,6 +2,7 @@ package springies;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import org.w3c.dom.Node;
 
@@ -15,6 +16,7 @@ import jboxGlue.WorldManager;
 import jgame.JGColor;
 import jgame.JGObject;
 import jgame.platform.JGEngine;
+import jboxGlue.CenterOfMass;
 
 import org.jbox2d.common.Vec2;
 
@@ -82,12 +84,12 @@ public class Springies extends JGEngine
 		// add a bouncy ball
 		// NOTE: you could make this into a separate class, but I'm lazy
 
-		/*PhysicalObjectMass*/ m1 = new PhysicalObjectMass("ball", 1, JGColor.red, 10, 5, displayWidth()/2, displayHeight()/2,0,0);
-		/*PhysicalObjectMass*/ m2 = new PhysicalObjectMass("ball2", 1, JGColor.yellow, 10, 5, displayWidth()/2-50, displayHeight()/2-50, 0,0);
+//		/*PhysicalObjectMass*/ m1 = new PhysicalObjectMass("ball", 1, JGColor.red, 10, 5, displayWidth()/2, displayHeight()/2,0,0);
+//		/*PhysicalObjectMass*/ m2 = new PhysicalObjectMass("ball2", 1, JGColor.yellow, 10, 5, displayWidth()/2-50, displayHeight()/2-50, 0,0);
 		//		/*PhysicalObjectMass*/ m3 = new PhysicalObjectMass("ball3", 1, JGColor.blue, 10, 5, displayWidth()/2-100, displayHeight()/2-100, 0, 0);
-		Spring temp = new Spring("spring", 0, JGColor.red);
-		temp.connect(m1, m2);
-		m1.setForce(8000, -10000);
+//		Spring temp = new Spring("spring", 0, JGColor.red);
+//		temp.connect(m1, m2, 0.05, 100.0);
+//		m1.setForce(8000, -10000);
 		//		temp.calculateSpringForce(m1.myX, m1.myY, m2.myX, m2.myY, 1, 50);
 		//		Spring temp2 = new Spring("spring", 0, JGColor.blue);
 		//		temp2.connect(m1, m3);
@@ -120,41 +122,69 @@ public class Springies extends JGEngine
 		wall.setPos(displayWidth() - WALL_MARGIN, displayHeight() / 2);
 	}
 
-	public HashMap<String, PhysicalObject> createMasses(String[][] masses) {
-		HashMap<String, PhysicalObject> allmasses = new HashMap<String, PhysicalObject>();
+	public HashMap<String, PhysicalObjectMass> createMasses(String[][] masses) {
+		
+		HashMap<String, PhysicalObjectMass> allmasses = new HashMap<String, PhysicalObjectMass>();
 		for (int i = 0; i< masses.length; i++) {
 			String[] currmass = masses[i];
 			String id = currmass[0];
-			int collisionId = 10;
-			JGColor color = JGColor.green;
-			double radius = 3;
-			double mass = 5;
-			double x = Double.parseDouble(currmass[1]);
-			double y = Double.parseDouble(currmass[2]);
-			double vx = Double.parseDouble(currmass[3]);
-			double vy = Double.parseDouble(currmass[4]);
-			System.out.println("creatednewmass");
-			PhysicalObject newmass = new PhysicalObjectMass(id, collisionId, color, radius, mass, x, y, vx, vy);
+            int collisionId = 1;
+            JGColor color = JGColor.green;
+            double radius = 5;
+            
+            double x = Double.parseDouble(currmass[1]);
+            double y = Double.parseDouble(currmass[2]);
+            double mass = Double.parseDouble(currmass[3]);
+            double vx = Double.parseDouble(currmass[4]);
+            double vy = Double.parseDouble(currmass[5]);
+            System.out.println("creatednewmass");
+			PhysicalObjectMass newmass = new PhysicalObjectMass(id, collisionId, color, radius, mass, x, y, vx, vy);
+			newmass.setGravity(mass, gravityvals[0], gravityvals[1]);
+			System.out.println(gravityvals[0]);
+			System.out.println(gravityvals[1]);
 			allmasses.put(id, newmass);
 
-
 		}
+		
+		CenterOfMass com = new CenterOfMass("com", 5, JGColor.green);
+		com.setCOMForce(allmasses);
 		System.out.println(allmasses.toString());
 		return allmasses; 
 
 	}
 
-	public void createSprings(String[][] springs, HashMap<String, PhysicalObject> allmasses) {
+	public void createSprings(String[][] springs, HashMap<String, PhysicalObjectMass> allmasses) {
+
 		for (int i = 0; i< springs.length; i++) {
 			String[] currspring = springs[i];
-			Spring spring = new Spring("spring", 10, JGColor.yellow);
-			spring.connect((PhysicalObjectMass)allmasses.get(currspring[0]), (PhysicalObjectMass) allmasses.get(currspring[1]));
+			Spring spring = new Spring("spring", 1, JGColor.yellow);
+			
+			PhysicalObjectMass mass1 = allmasses.get(currspring[0]); 
+			PhysicalObjectMass mass2 = allmasses.get(currspring[1]);
+			
 			System.out.println("connected " + currspring[0] + " " +currspring[1]);
-
+			double k = Double.parseDouble(currspring[3]);
+			double restLength = Double.parseDouble(currspring[2]);
+			spring.connect(mass1, mass2, 5, restLength );
+			//spring.calculateSpringForce(mass1.myX, mass1.myY, mass2.myX, mass2.myY, k, restLength);
 		}
 
 	}
-
+	
+//	public ArrayList<ArrayList<PhysicalObjectMass>> findNetworks(String[][] springs, HashMap<String, PhysicalObject> allmasses) {
+//		ArrayList<PhysicalObjectMass> network = new ArrayList<PhysicalObjectMass>();
+//		
+//		for (int i = 0; i<springs.length; i++) {
+//			String[] currspring = springs[i];
+//			PhysicalObjectMass currmass = (PhysicalObjectMass)allmasses.get(i);
+//		}
+//		
+//		return null;
+//		
+//		
+//	}
+//	
+	
 
 	public void createPhysicalElements( ) {
 
@@ -163,7 +193,7 @@ public class Springies extends JGEngine
 		System.out.println(doc.toString());
 
 		String[][] masses = elements.createMasses(doc);
-		HashMap<String, PhysicalObject> allmasses = createMasses(masses);
+		HashMap<String, PhysicalObjectMass> allmasses = createMasses(masses);
 		allmasses.toString();
 
 		System.out.println(masses[0][0] + "TEST");
@@ -201,9 +231,8 @@ public class Springies extends JGEngine
 		//		m1.setViscosity(0);
 		//		m2.setViscosity(0);
 		//		m3.setViscosity(0);
-		temp.calculateSpringForce(50, 50, 100, 100, 4, 50);
+//		temp.calculateSpringForce(50, 50, 100, 100, 4, 50);
 		//		temp2.calculateSpringForce(m1.myX, m1.myY, m3.myX, m3.myY, 1, 50);
-		System.out.println(m1.myX + "Test");
 	}
 
 	@Override

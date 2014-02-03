@@ -27,6 +27,6 @@ public class WorldManager
         AABB worldBounds = new AABB(new Vec2(0, 0),
                                     new Vec2(engine.displayWidth(), engine.displayHeight()));
         Vec2 gravity = new Vec2(0.0f, 0.0f);
-        ourWorld = new World(worldBounds, gravity, true);
+        ourWorld = new World(worldBounds,gravity, true);
     }
 }
