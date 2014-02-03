@@ -12,6 +12,10 @@ public class PhysicalObjectMass extends PhysicalObject
 {
 	private double myRadius;
 	public double myMass;
+	public double myX;
+	public double myY;
+	public double vx;
+	
 
 
 	public PhysicalObjectMass (String id,
@@ -61,6 +65,8 @@ public class PhysicalObjectMass extends PhysicalObject
 		// save arguments
 		myRadius = radius;
 		myMass = mass;
+		myX = x;
+		myY = y;
 		int intRadius = (int)radius;
 		// make it a circle
 		CircleDef shape = new CircleDef();
