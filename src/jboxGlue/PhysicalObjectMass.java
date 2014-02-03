@@ -106,7 +106,7 @@ public class PhysicalObjectMass extends PhysicalObject
 
 
 
-	public void hit (JGObject other)
+	/*public void hit (JGObject other)
 	{
 		// we hit something! bounce off it!
 		Vec2 velocity = myBody.getLinearVelocity();
@@ -121,7 +121,7 @@ public class PhysicalObjectMass extends PhysicalObject
 		}
 		// apply the change
 		myBody.setLinearVelocity(velocity);
-	}
+	}*/
 
 	@Override
 	public void paintShape ()

@@ -121,14 +121,9 @@ public class Springies extends JGEngine
 				WALL_THICKNESS, WALL_HEIGHT);
 		wall.setPos(displayWidth() - WALL_MARGIN, displayHeight() / 2);
 	}
-<<<<<<< HEAD
-	
-	public HashMap<String, PhysicalObjectMass> createMasses(String[][] masses) {
-=======
 
 	public HashMap<String, PhysicalObjectMass> createMasses(String[][] masses) {
 		
->>>>>>> cody
 		HashMap<String, PhysicalObjectMass> allmasses = new HashMap<String, PhysicalObjectMass>();
 		for (int i = 0; i< masses.length; i++) {
 			String[] currmass = masses[i];
@@ -144,12 +139,9 @@ public class Springies extends JGEngine
             double vy = Double.parseDouble(currmass[5]);
             System.out.println("creatednewmass");
 			PhysicalObjectMass newmass = new PhysicalObjectMass(id, collisionId, color, radius, mass, x, y, vx, vy);
-<<<<<<< HEAD
-=======
 			newmass.setGravity(mass, gravityvals[0], gravityvals[1]);
 			System.out.println(gravityvals[0]);
 			System.out.println(gravityvals[1]);
->>>>>>> cody
 			allmasses.put(id, newmass);
 
 		}
@@ -160,23 +152,12 @@ public class Springies extends JGEngine
 		return allmasses; 
 
 	}
-<<<<<<< HEAD
-	
-	
-	public void createSprings(String[][] springs, HashMap<String, PhysicalObjectMass> allmasses) {
-		for (int i = 0; i< springs.length; i++) {
-			String[] currspring = springs[i];
-			Spring spring = new Spring("spring", 10, JGColor.yellow);
-			spring.connect(allmasses.get(currspring[0]),  allmasses.get(currspring[1]));
-			System.out.println("connected " + currspring[0] + " " +currspring[1]);
-=======
 
 	public void createSprings(String[][] springs, HashMap<String, PhysicalObjectMass> allmasses) {
 
 		for (int i = 0; i< springs.length; i++) {
 			String[] currspring = springs[i];
 			Spring spring = new Spring("spring", 1, JGColor.yellow);
->>>>>>> cody
 			
 			PhysicalObjectMass mass1 = allmasses.get(currspring[0]); 
 			PhysicalObjectMass mass2 = allmasses.get(currspring[1]);
