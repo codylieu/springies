@@ -73,7 +73,7 @@ public class PhysicalObjectMass extends PhysicalObject
 		x = position.x;
 		y = position.y;
 		myRotation = -myBody.getAngle();
-		initViscosity();
+//		initViscosity();
 	}
 
 	private void init (double radius, double mass, double x, double y, double vx, double vy)
@@ -88,6 +88,8 @@ public class PhysicalObjectMass extends PhysicalObject
 		CircleDef shape = new CircleDef();
 		shape.radius = (float)radius;
 		shape.density = (float)mass;
+		// Gets rid of collisions?
+		shape.filter.groupIndex = -1;
 		createBody(shape);
 		setBBox(-intRadius, -intRadius, 2 * intRadius, 2 * intRadius);
 		setPos(x, y);
@@ -106,12 +108,12 @@ public class PhysicalObjectMass extends PhysicalObject
 
 
 
-	/*public void hit (JGObject other)
+	public void hit (JGObject other)
 	{
 		// we hit something! bounce off it!
 		Vec2 velocity = myBody.getLinearVelocity();
 		// is it a tall wall?
-		final double DAMPING_FACTOR = 0.8;
+		final double DAMPING_FACTOR = .8;
 		boolean isSide = other.getBBox().height > other.getBBox().width;
 		if (isSide) {
 			velocity.x *= -DAMPING_FACTOR;
@@ -121,7 +123,7 @@ public class PhysicalObjectMass extends PhysicalObject
 		}
 		// apply the change
 		myBody.setLinearVelocity(velocity);
-	}*/
+	}
 
 	@Override
 	public void paintShape ()

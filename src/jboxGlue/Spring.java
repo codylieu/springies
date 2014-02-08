@@ -36,6 +36,10 @@ public class Spring extends PhysicalObject {
 		m2.setForce(-forceX, -forceY);
 	}
 	
+	public void move(){
+		
+	}
+	
 	@Override
     public void paintShape()
     {

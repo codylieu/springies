@@ -41,6 +41,7 @@ public class PhysicalObjectFixedMass extends PhysicalObject {
         CircleDef shape = new CircleDef();
         shape.radius = (float)radius;
         shape.density = (float)mass;
+        shape.filter.groupIndex = -1;
         createBody(shape);
         setBBox(-intRadius, -intRadius, 2 * intRadius, 2 * intRadius);
         setPos(x, y);
