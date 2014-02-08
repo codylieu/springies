@@ -2,6 +2,7 @@ package springies;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.w3c.dom.Node;
@@ -144,6 +145,27 @@ public class Springies extends JGEngine
 		
 	}
 	
+	public double[] averageLocation(HashMap<String, PhysicalObjectMass> allmasses) {
+		double[] location = new double[2];
+		
+		double totalx = 0;
+		double totaly = 0 ;
+		
+		
+		for (Map.Entry entry : allmasses.entrySet()) {
+			PhysicalObjectMass currmass = (PhysicalObjectMass) entry.getValue();
+			totalx += currmass.myX;
+			totaly += currmass.myY;
+		    System.out.print("key,val: ");
+		    System.out.println(entry.getKey() + "," + entry.getValue());
+		}
+		location[0] = totalx;
+		location[1] = totaly; 
+		return location; 
+
+		
+	}
+	
 	
 	public void createSprings(String[][] springs, HashMap<String, PhysicalObjectMass> allmasses) {
 		for (int i = 0; i< springs.length; i++) {
@@ -156,19 +178,23 @@ public class Springies extends JGEngine
 		
 	}
 	
-//	public ArrayList<ArrayList<PhysicalObjectMass>> findNetworks(String[][] springs, HashMap<String, PhysicalObject> allmasses) {
-//		ArrayList<PhysicalObjectMass> network = new ArrayList<PhysicalObjectMass>();
-//		
-//		for (int i = 0; i<springs.length; i++) {
-//			String[] currspring = springs[i];
-//			PhysicalObjectMass currmass = (PhysicalObjectMass)allmasses.get(i);
-//		}
-//		
-//		return null;
-//		
-//		
-//	}
-//	
+	public ArrayList<ArrayList<PhysicalObjectMass>> findNetworks(String[][] springs, HashMap<String, PhysicalObject> allmasses) {
+		ArrayList<PhysicalObjectMass> network = new ArrayList<PhysicalObjectMass>();
+		
+		for (int i = 0; i< springs.length; i++) {
+			 
+			String[] currspring = springs[i];
+			String mass1 = currspring[0];
+			String mass2 = currspring[1];
+			
+			PhysicalObjectMass currmass = (PhysicalObjectMass)allmasses.get(i);
+		}
+		
+		return null;
+		
+		
+	}
+	
 	
 	public void createPhysicalElements( ) {
 		
