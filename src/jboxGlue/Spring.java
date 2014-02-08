@@ -15,9 +15,12 @@ public class Spring extends PhysicalObject {
 		
 	}
 
-	public void connect(PhysicalObjectMass mass1, PhysicalObjectMass mass2) {
+	public void connect(PhysicalObjectMass mass1, PhysicalObjectMass mass2, double k, double restlength) {
+		
 		m1 = mass1;
 		m2 = mass2;
+		myrestlength = restlength;
+		myk = k;
 		
 	}
 
@@ -34,6 +37,10 @@ public class Spring extends PhysicalObject {
 		
 	}
 	
+	public void move(){
+		
+	}
+	
 	@Override
     public void paintShape()
     {
@@ -41,6 +48,8 @@ public class Spring extends PhysicalObject {
 		double y1 = m1.y;
 		double x2 = m2.x;
 		double y2 = m2.y;
+		calculateSpringForce(x1, y1, x2, y2, myk, myrestlength);
+		
 		
         myEngine.setColor(myColor);
       
