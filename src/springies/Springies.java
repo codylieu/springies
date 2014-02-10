@@ -179,8 +179,8 @@ public class Springies extends JGEngine
 
 		}
 
-		CenterOfMass com = new CenterOfMass("com", 5, JGColor.green);
-		com.setCOMForce(allmasses);
+//		CenterOfMass com = new CenterOfMass("com", 5, JGColor.green);
+//		com.setCOMForce(allmasses);
 		System.out.println(allmasses.toString());
 		return allmasses; 
 
