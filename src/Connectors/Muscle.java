@@ -19,7 +19,6 @@ public class Muscle extends Spring{
 	private double amplitude;
 	private double timer; // Find a better way to do this
 
-
 	@Override
 	public void applyForce(){
 		double totalDist = Math.sqrt(Math.pow(m2.x-m1.x, 2) + Math.pow(m2.y-m1.y, 2));
@@ -31,7 +30,4 @@ public class Muscle extends Spring{
 		m1.setForce(forceX, forceY);
 		m2.setForce(-forceX, -forceY);
 	}
-
-	
-
 }

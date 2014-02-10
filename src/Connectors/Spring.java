@@ -13,33 +13,26 @@ public class Spring extends PhysicalObject implements IForce {
 	private double myRestLength;
 	private double myK;
 	
-	
 	public Spring(String name, int collisionId, JGColor color) {
 		super(name, collisionId, color);
 		
 	}
 
 	public void connect(PhysicalObjectMass mass1, PhysicalObjectMass mass2, double k, double restlength) {
-		
 		m1 = mass1;
 		m2 = mass2;
 		myRestLength = restlength;
 		myK = k;
-		
 	}
 	
 	@Override
-    public void paintShape()
-    {
+    public void paintShape(){
 		double x1 = m1.x;
 		double y1 = m1.y;
 		double x2 = m2.x;
 		double y2 = m2.y;
 		applyForce();
-		
-		
         myEngine.setColor(myColor);
-      
         myEngine.drawLine(x1, y1, x2, y2);
     }
 
@@ -53,8 +46,5 @@ public class Spring extends PhysicalObject implements IForce {
 		double forceY = (myK * (totalDist - myRestLength) * yVec)/totalDist;
 		m1.setForce(forceX, forceY);
 		m2.setForce(-forceX, -forceY);
-	}
-    
- 
-	
+	}	
 }
