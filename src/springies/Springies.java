@@ -73,10 +73,10 @@ public class Springies extends JGEngine
 		getEnvironment("assets/environment.xml");
 		System.out.println("VISCOSITY MAGNITUDE: " + viscositymagnitude);
 		WorldManager.initWorld(this);
-//				WorldManager.getWorld().setGravity(new Vec2(0.0f, 0.1f));
+//		WorldManager.getWorld().setGravity(new Vec2(0.0f, 0.1f));
 		addBall();
 		addWalls();
-//		createPhysicalElements();
+		//		createPhysicalElements();
 	}
 
 	public void addBall ()
@@ -137,7 +137,7 @@ public class Springies extends JGEngine
 			double vy = Double.parseDouble(currmass[5]);
 			System.out.println("creatednewmass");
 			PhysicalObjectMass newmass = new PhysicalObjectMass(id, collisionId, color, radius, mass, x, y, vx, vy);
-//						newmass.setGravity(mass, gravityvals[0], gravityvals[1]);
+			//						newmass.setGravity(mass, gravityvals[0], gravityvals[1]);
 			System.out.println(gravityvals[0]);
 			System.out.println(gravityvals[1]);
 			allmasses.put(id, newmass);
@@ -150,29 +150,29 @@ public class Springies extends JGEngine
 		return allmasses; 
 
 	}
-	
+
 	public double[] averageLocation(HashMap<String, PhysicalObjectMass> allmasses) {
 		double[] location = new double[2];
-		
+
 		double totalx = 0;
 		double totaly = 0 ;
-		
-		
+
+
 		for (Map.Entry entry : allmasses.entrySet()) {
 			PhysicalObjectMass currmass = (PhysicalObjectMass) entry.getValue();
 			totalx += currmass.myX;
 			totaly += currmass.myY;
-		    System.out.print("key,val: ");
-		    System.out.println(entry.getKey() + "," + entry.getValue());
+			System.out.print("key,val: ");
+			System.out.println(entry.getKey() + "," + entry.getValue());
 		}
 		location[0] = totalx;
 		location[1] = totaly; 
 		return location; 
 
-		
+
 	}
-	
-	
+
+
 
 	public void createSprings(String[][] springs, HashMap<String, PhysicalObjectMass> allmasses) {
 
@@ -187,7 +187,7 @@ public class Springies extends JGEngine
 			double k = Double.parseDouble(currspring[3]);
 			double restLength = Double.parseDouble(currspring[2]);
 			spring.connect(mass1, mass2, 6, restLength );
-			spring.calculateSpringForce(mass1.myX, mass1.myY, mass2.myX, mass2.myY, k, restLength);
+			spring.applyForce();
 		}
 
 	}
@@ -244,6 +244,7 @@ public class Springies extends JGEngine
 	}
 
 
+	boolean FAKE_GRAVITY = false;
 
 	@Override
 	public void doFrame ()
@@ -252,9 +253,19 @@ public class Springies extends JGEngine
 		WorldManager.getWorld().step(1f, 1);
 		moveObjects();
 		checkCollision(2, 1);
-		temp.calculateSpringForce(m1.myX, m1.myY, m2.myX, m2.myY, 1, 14);
-		temp2.calculateSpringForce(m1.myX, m1.myY, m3.myX, m3.myY, 1, 14);
-		temp3.calculateSpringForce(m2.myX, m2.myY, m3.myX, m3.myY, 1, 14);
+		temp.applyForce();
+		temp2.applyForce();
+		temp3.applyForce();
+		
+		if(getKey('G')){
+			FAKE_GRAVITY = !FAKE_GRAVITY;
+			clearKey('G');
+		}
+		if(FAKE_GRAVITY){
+			m1.setForce(0, 500);
+			m2.setForce(0, 500);
+			m3.setForce(0, 500);
+		}
 
 	}
 

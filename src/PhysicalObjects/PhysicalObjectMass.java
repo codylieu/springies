@@ -9,6 +9,7 @@ import org.jbox2d.common.Vec2;
 import Forces.Viscosity;
 import Forces.WorldManager;
 
+
 public class PhysicalObjectMass extends PhysicalObject
 {
 	private double myRadius;
@@ -16,8 +17,6 @@ public class PhysicalObjectMass extends PhysicalObject
 	public double myX;
 	public double myY;
 	public double vx;
-	
-
 
 	public PhysicalObjectMass (String id,
 			int collisionId,

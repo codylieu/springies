@@ -1,7 +1,5 @@
 Moving mass extends fixed mass
 
-Abstract Force class
-
 Make a separate class for Gravity
 
 Have variables held in the class
