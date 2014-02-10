@@ -6,12 +6,7 @@ import PhysicalObjects.PhysicalObject;
 import PhysicalObjects.PhysicalObjectMass;
 import jgame.JGColor;
 
-public class CenterOfMass extends PhysicalObject{
-
-	public CenterOfMass(String name, int collisionId, JGColor color) {
-		super(name, collisionId, color);
-		// TODO Auto-generated constructor stub
-	}
+public class CenterOfMass extends GlobalForces{
 
 	public void setCOMForce(HashMap<String, PhysicalObjectMass> map){
 		
@@ -47,9 +42,9 @@ public class CenterOfMass extends PhysicalObject{
 		
 		return coordinatesCOM;
 	}
-	
+
 	@Override
-	protected void paintShape() {
+	public void applyForce() {
 		// TODO Auto-generated method stub
 		
 	}
