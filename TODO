@@ -6,6 +6,4 @@ Have variables held in the class
 
 Have it so that setForce calculates force for the sum of all forces
 
-Assembly should be a class
-
 No public instance variables

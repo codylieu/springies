@@ -13,8 +13,8 @@ import jgame.platform.JGEngine;
 
 import org.jbox2d.common.Vec2;
 
+import Connectors.Spring;
 import Forces.CenterOfMass;
-import Forces.Spring;
 import Forces.WorldManager;
 import PhysicalObjects.PhysicalObject;
 import PhysicalObjects.PhysicalObjectCircle;

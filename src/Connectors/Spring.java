@@ -1,5 +1,6 @@
-package Forces;
+package Connectors;
 
+import Forces.IForce;
 import PhysicalObjects.PhysicalObject;
 import PhysicalObjects.PhysicalObjectMass;
 import jgame.JGColor;

@@ -1,4 +1,4 @@
-package Forces;
+package Connectors;
 
 import PhysicalObjects.PhysicalObjectMass;
 import jgame.JGColor;
@@ -14,6 +14,8 @@ public class Muscle extends Spring{
 	protected PhysicalObjectMass m2;
 	private double myRestLength;
 	private double myK;
+	
+	// Unique to Muscles
 	private double amplitude;
 	private double timer; // Find a better way to do this
 

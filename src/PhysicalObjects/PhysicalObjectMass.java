@@ -16,7 +16,6 @@ public class PhysicalObjectMass extends PhysicalObject
 	public double myMass;
 	public double myX;
 	public double myY;
-	public double vx;
 
 	public PhysicalObjectMass (String id,
 			int collisionId,

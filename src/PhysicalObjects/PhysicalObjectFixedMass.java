@@ -7,8 +7,8 @@ import jgame.JGColor;
 public class PhysicalObjectFixedMass extends PhysicalObject {
 
 	private double myRadius;
-	private double myX;
-	private double myY;
+//	private double myX;
+//	private double myY;
 
     public PhysicalObjectFixedMass (String id,
                                  int collisionId,
