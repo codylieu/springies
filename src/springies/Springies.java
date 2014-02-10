@@ -4,17 +4,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
 import org.w3c.dom.Node;
-import jboxGlue.Wall;
-import jboxGlue.WalledArea;
+
 import jgame.*;
 import jgame.platform.*;
 import jgame.JGColor;
 import jgame.JGObject;
 import jgame.platform.JGEngine;
+
 import org.jbox2d.common.Vec2;
+
 import Connectors.Spring;
 import Forces.CenterOfMass;
 import Forces.WorldManager;
@@ -23,6 +26,8 @@ import PhysicalObjects.PhysicalObjectCircle;
 import PhysicalObjects.PhysicalObjectFixedMass;
 import PhysicalObjects.PhysicalObjectMass;
 import PhysicalObjects.PhysicalObjectRect;
+import PhysicalObjects.Wall;
+import PhysicalObjects.WalledArea;
 import parserutil.EnvironmentParser;
 import parserutil.ObjectsParser;
 
