@@ -2,6 +2,8 @@ package jboxGlue;
 
 import org.jbox2d.common.Vec2;
 
+import PhysicalObjects.PhysicalObject;
+
 import jgame.JGColor;
 
 public class WalledArea extends PhysicalObject {

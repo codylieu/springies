@@ -1,38 +1,51 @@
-package jboxGlue;
-
-import org.jbox2d.collision.CircleDef;
+package PhysicalObjects;
 
 import jgame.JGColor;
 
-public class PhysicalObjectFixedMass extends PhysicalObject {
+import org.jbox2d.collision.CircleDef;
 
-	private double myRadius;
 
-    public PhysicalObjectFixedMass (String id,
+public class PhysicalObjectCircle extends PhysicalObject
+{
+    private double myRadius;
+
+    public PhysicalObjectCircle (String id,
+                                 int collisionId,
+                                 JGColor color,
+                                 double radius)
+    {
+        this(id, collisionId, color, radius, 0);
+    }
+
+    public PhysicalObjectCircle (String id,
                                  int collisionId,
                                  JGColor color,
                                  double radius,
-                                 double mass,
-                                 double x,
-                                 double y)
+                                 double mass)
     {
         super(id, collisionId, color);
-        init(radius, mass, x, y);
+        init(radius, mass);
     }
 
-    public PhysicalObjectFixedMass (String id,
+    public PhysicalObjectCircle (String id,
+                                 int collisionId,
+                                 String gfxname,
+                                 double radius)
+    {
+        this(id, collisionId, gfxname, radius, 0);
+    }
+
+    public PhysicalObjectCircle (String id,
                                  int collisionId,
                                  String gfxname,
                                  double radius,
-                                 double mass,
-                                 double x,
-                                 double y)
+                                 double mass)
     {
         super(id, collisionId, gfxname);
-        init(radius, mass, x, y);
+        init(radius, mass);
     }
 
-    private void init (double radius, double mass, double x, double y)
+    private void init (double radius, double mass)
     {
         // save arguments
         myRadius = radius;
@@ -41,13 +54,9 @@ public class PhysicalObjectFixedMass extends PhysicalObject {
         CircleDef shape = new CircleDef();
         shape.radius = (float)radius;
         shape.density = (float)mass;
-        shape.filter.groupIndex = -1;
         createBody(shape);
         setBBox(-intRadius, -intRadius, 2 * intRadius, 2 * intRadius);
-        setPos(x, y);
     }
-    
-    
 
     @Override
     public void paintShape ()
@@ -55,5 +64,4 @@ public class PhysicalObjectFixedMass extends PhysicalObject {
         myEngine.setColor(myColor);
         myEngine.drawOval(x, y, (float)myRadius * 2, (float)myRadius * 2, true, true);
     }
-
 }

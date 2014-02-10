@@ -2,28 +2,27 @@ package springies;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
-
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
 import org.w3c.dom.Node;
-
-import jboxGlue.PhysicalObject;
-import jboxGlue.PhysicalObjectCircle;
-import jboxGlue.PhysicalObjectFixedMass;
-import jboxGlue.PhysicalObjectMass;
-import jboxGlue.PhysicalObjectRect;
-import jboxGlue.Spring;
 import jboxGlue.Wall;
 import jboxGlue.WalledArea;
-import jboxGlue.WorldManager;
 import jgame.*;
 import jgame.platform.*;
-import jboxGlue.CenterOfMass;
-
+import jgame.JGColor;
+import jgame.JGObject;
+import jgame.platform.JGEngine;
 import org.jbox2d.common.Vec2;
-
+import Connectors.Spring;
+import Forces.CenterOfMass;
+import Forces.WorldManager;
+import PhysicalObjects.PhysicalObject;
+import PhysicalObjects.PhysicalObjectCircle;
+import PhysicalObjects.PhysicalObjectFixedMass;
+import PhysicalObjects.PhysicalObjectMass;
+import PhysicalObjects.PhysicalObjectRect;
 import parserutil.EnvironmentParser;
 import parserutil.ObjectsParser;
 
@@ -90,9 +89,11 @@ public class Springies extends JGEngine
 		addBall();
 		addWalls();
 
+
 		createPhysicalElements("assets/example.xml");
 
 		//		PhysicalObject fixed = new PhysicalObjectFixedMass("ball", 1, JGColor.yellow, 10, 0, displayWidth()/1.2, displayHeight()/1.2);
+
 
 	}
 
@@ -101,30 +102,17 @@ public class Springies extends JGEngine
 		// add a bouncy ball
 		// NOTE: you could make this into a separate class, but I'm lazy
 
-		/*PhysicalObjectMass*/ m1 = new PhysicalObjectMass("ball", 1, JGColor.red, 10, 5, displayWidth()/2, displayHeight()/2,0,0);
-		/*PhysicalObjectMass*/ m2 = new PhysicalObjectMass("ball2", 1, JGColor.yellow, 10, 5, displayWidth()/2-100, displayHeight()/2-100, 0,0);
-		/*PhysicalObjectMass*/ m3 = new PhysicalObjectMass("ball3", 1, JGColor.blue, 10, 5, displayWidth()/2-200, displayHeight()/2, 0, 0);
+		m1 = new PhysicalObjectMass("ball", 1, JGColor.red, 10, 5, displayWidth()/2, displayHeight()/2,0,0);
+		m2 = new PhysicalObjectMass("ball2", 1, JGColor.yellow, 10, 5, displayWidth()/2-100, displayHeight()/2-100, 0,0);
+		m3 = new PhysicalObjectMass("ball3", 1, JGColor.blue, 10, 5, displayWidth()/2-200, displayHeight()/2, 0, 0);
 
-				temp = new Spring("spring", 0, JGColor.pink);
-//				temp.calculateSpringForce(m1.myX, m1.myY, m2.myX, m2.myY, 4, 100);
+		temp = new Spring("spring", 0, JGColor.pink);
+		temp2 = new Spring("spring", 0, JGColor.magenta);
+		temp3 = new Spring("spring", 0, JGColor.orange);
 
-				temp2 = new Spring("spring", 0, JGColor.magenta);
-				temp3 = new Spring("spring", 0, JGColor.orange);
-				temp.connect(m1, m2, 4, 20);
-				temp2.connect(m1, m3, 4, 20);
-//				temp2.calculateSpringForce(m1.myX, m1.myY, m3.myX, m3.myY, 4, 100);
-
-
-				temp3.connect(m2, m3, 4, 20);
-//				temp3.calculateSpringForce(m2.myX, m2.myY, m3.myX, m3.myY, 4, 100);
-
-		//		m1.setForce(-10000, -10000);
-		//				temp.calculateSpringForce(m1.myX, m1.myY, m2.myX, m2.myY, 1, 50);
-
-		//				temp2.calculateSpringForce(m1.myX, m1.myY, m3.myX, m3.myY, 1, 50);
-		//				m1.setGravity(m1.myMass, 90, -10000);
-		//				m2.setGravity(m2.myMass, 0, 10000);
-		//				m3.setGravity(m3.myMass, 90, -10000);
+		temp.connect(m1, m2, 4, 20);
+		temp2.connect(m1, m3, 4, 20);
+		temp3.connect(m2, m3, 4, 20);
 
 	}
 
@@ -184,7 +172,7 @@ public class Springies extends JGEngine
 			double vy = Double.parseDouble(currmass[5]);
 			System.out.println("creatednewmass");
 			PhysicalObjectMass newmass = new PhysicalObjectMass(id, collisionId, color, radius, mass, x, y, vx, vy);
-//			newmass.setGravity(mass, gravityvals[0], gravityvals[1]);
+			//						newmass.setGravity(mass, gravityvals[0], gravityvals[1]);
 			System.out.println(gravityvals[0]);
 			System.out.println(gravityvals[1]);
 			allmasses.put(id, newmass);
@@ -197,6 +185,29 @@ public class Springies extends JGEngine
 		return allmasses; 
 
 	}
+
+	public double[] averageLocation(HashMap<String, PhysicalObjectMass> allmasses) {
+		double[] location = new double[2];
+
+		double totalx = 0;
+		double totaly = 0 ;
+
+
+		for (Map.Entry entry : allmasses.entrySet()) {
+			PhysicalObjectMass currmass = (PhysicalObjectMass) entry.getValue();
+			totalx += currmass.myX;
+			totaly += currmass.myY;
+			System.out.print("key,val: ");
+			System.out.println(entry.getKey() + "," + entry.getValue());
+		}
+		location[0] = totalx;
+		location[1] = totaly; 
+		return location; 
+
+
+	}
+
+
 
 	public void createSprings(String[][] springs, HashMap<String, PhysicalObjectMass> allmasses) {
 
@@ -211,7 +222,7 @@ public class Springies extends JGEngine
 			double k = Double.parseDouble(currspring[3]);
 			double restLength = Double.parseDouble(currspring[2]);
 			spring.connect(mass1, mass2, 6, restLength );
-			spring.calculateSpringForce(mass1.myX, mass1.myY, mass2.myX, mass2.myY, k, restLength);
+			spring.applyForce();
 		}
 
 	}
@@ -254,6 +265,7 @@ public class Springies extends JGEngine
 
 	}
 
+
 	private String userSelects() {
 		JFileChooser chooser = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
@@ -273,6 +285,10 @@ public class Springies extends JGEngine
 		
 	}
 	
+
+
+	boolean FAKE_GRAVITY = false;
+
 	@Override
 	public void doFrame ()
 	{
@@ -280,10 +296,11 @@ public class Springies extends JGEngine
 		WorldManager.getWorld().step(1f, 1);
 		moveObjects();
 		checkCollision(2, 1);
-		temp.calculateSpringForce(m1.myX, m1.myY, m2.myX, m2.myY, 1, 14);
-		temp2.calculateSpringForce(m1.myX, m1.myY, m3.myX, m3.myY, 1, 14);
-		temp3.calculateSpringForce(m2.myX, m2.myY, m3.myX, m3.myY, 1, 14);
+		temp.applyForce();
+		temp2.applyForce();
+		temp3.applyForce();
 		
+
 		if (getKey(KeyUp)) {
 			walls.increaseArea();
 			
@@ -299,6 +316,18 @@ public class Springies extends JGEngine
 			createPhysicalElements(chosenFile);
 		}
 		
+
+		if(getKey('G')){
+			FAKE_GRAVITY = !FAKE_GRAVITY;
+			clearKey('G');
+		}
+		if(FAKE_GRAVITY){
+			m1.setForce(0, 500);
+			m2.setForce(0, 500);
+			m3.setForce(0, 500);
+		}
+
+
 	}
 
 

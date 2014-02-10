@@ -1,25 +1,9 @@
-Change package names/Nest packages
-
 Moving mass extends fixed mass
 
-Muscle extends Springs
-
-Abstract Force class
-
-Walls Class
-
-When gravity is called a second time, the forces compound on each other, make a separate class for Gravity
-
-Keep some separation between Parser and Springies. Remove dependencies on Parser and game
-
-Don't instantiate objects directly in the parser, use a different way to implement it
+Make a separate class for Gravity
 
 Have variables held in the class
 
 Have it so that setForce calculates force for the sum of all forces
 
-Assembly should be a class yeeeee
-
 No public instance variables
-
-If statements should be wrapped in brackets and so should loops
