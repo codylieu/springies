@@ -1,4 +1,4 @@
-package jboxGlue;
+package Forces;
 
 import jgame.platform.JGEngine;
 import org.jbox2d.collision.AABB;

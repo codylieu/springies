@@ -1,11 +1,13 @@
-package jboxGlue;
+package Forces;
 
+import PhysicalObjects.PhysicalObject;
+import PhysicalObjects.PhysicalObjectMass;
 import jgame.JGColor;
 import jgame.JGObject;
 
 public class Spring extends PhysicalObject {
-	private PhysicalObjectMass m1;
-	private PhysicalObjectMass m2;
+	protected PhysicalObjectMass m1;
+	protected PhysicalObjectMass m2;
 	private double myrestlength;
 	private double myk;
 	
@@ -26,7 +28,7 @@ public class Spring extends PhysicalObject {
 
 
 	public void calculateSpringForce(double x1, double y1, double x2, double y2, double k, double restLength){
-		
+		// Amplitude
 		double totalDist = Math.sqrt(Math.pow(x2-x1, 2) + Math.pow(y2-y1, 2));
 		double xVec = x2-x1; // x vector pointing FROM mass 1 TO mass 2
 		double yVec = y2-y1; // y vector pointing FROM mass 1 TO mass 2
@@ -34,10 +36,6 @@ public class Spring extends PhysicalObject {
 		double forceY = (k * (totalDist - restLength) * yVec)/totalDist;
 		m1.setForce(forceX, forceY);
 		m2.setForce(-forceX, -forceY);
-	}
-	
-	public void move(){
-		
 	}
 	
 	@Override

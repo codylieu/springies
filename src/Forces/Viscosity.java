@@ -1,6 +1,8 @@
-package jboxGlue;
+package Forces;
 
 import org.jbox2d.common.Vec2;
+
+import PhysicalObjects.PhysicalObjectMass;
 
 public class Viscosity{
 

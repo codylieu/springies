@@ -1,4 +1,4 @@
-package jboxGlue;
+package PhysicalObjects;
 
 import jgame.JGColor;
 import jgame.JGObject;
@@ -6,7 +6,8 @@ import jgame.JGObject;
 import org.jbox2d.collision.CircleDef;
 import org.jbox2d.common.Vec2;
 
-import jboxGlue.PhysicalObjectRect;
+import Forces.Viscosity;
+import Forces.WorldManager;
 
 public class PhysicalObjectMass extends PhysicalObject
 {

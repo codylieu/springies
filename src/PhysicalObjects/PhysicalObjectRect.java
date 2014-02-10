@@ -1,6 +1,7 @@
-package jboxGlue;
+package PhysicalObjects;
 
 import jgame.JGColor;
+
 import org.jbox2d.collision.PolygonDef;
 
 
