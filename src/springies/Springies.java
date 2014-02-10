@@ -293,6 +293,8 @@ public class Springies extends JGEngine
 
 
 	boolean FAKE_GRAVITY = false;
+	boolean VISCOSITY = false;
+	boolean CENTER_OF_MASS = false;
 
 	@Override
 	public void doFrame ()
@@ -331,6 +333,7 @@ public class Springies extends JGEngine
 			m2.setForce(0, 500);
 			m3.setForce(0, 500);
 		}
+		
 
 
 	}
@@ -340,6 +343,23 @@ public class Springies extends JGEngine
 	public void paintFrame (){
 		// nothing to do
 		// the objects paint themselves
-		drawString("Press down arrow to reduce box, up arrow to increase box, and G to toggle gravity.", pfWidth()/2, 40, 0, null, JGColor.red);
+		drawString("Press down arrow to reduce box, up arrow to increase box, and G to toggle gravity.", pfWidth()/2, 40, 0, null, JGColor.white);
+		drawString("Gravity: " + FAKE_GRAVITY, 80, 60, 0, null, JGColor.white);
+		drawString("Viscosity: " + VISCOSITY, 90, 80, 0, null, JGColor.white);
+		drawString("Center of Mass: " + CENTER_OF_MASS, 120, 100, 0, null, JGColor.white);
+		if(getKey(KeyUp)){
+			drawString("Wall Expanding: true", 125, 120, 0, null, JGColor.white);
+		}
+		else{
+			drawString("Wall Expanding: false", 125, 120, 0, null, JGColor.white);
+		}
+		if(getKey(KeyDown)){
+			drawString("Wall Shrinking: true", 120, 140, 0, null, JGColor.white);
+		}
+		else{
+			drawString("Wall Shrinking: false", 120, 140, 0, null, JGColor.white);
+		}
+
+
 	}
 }
