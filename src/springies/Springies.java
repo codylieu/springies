@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import org.w3c.dom.Node;
 
 import jboxGlue.PhysicalObject;
@@ -12,10 +15,11 @@ import jboxGlue.PhysicalObjectFixedMass;
 import jboxGlue.PhysicalObjectMass;
 import jboxGlue.PhysicalObjectRect;
 import jboxGlue.Spring;
+import jboxGlue.Wall;
+import jboxGlue.WalledArea;
 import jboxGlue.WorldManager;
-import jgame.JGColor;
-import jgame.JGObject;
-import jgame.platform.JGEngine;
+import jgame.*;
+import jgame.platform.*;
 import jboxGlue.CenterOfMass;
 
 import org.jbox2d.common.Vec2;
@@ -38,6 +42,15 @@ public class Springies extends JGEngine
 	public Spring temp;
 	public Spring temp2;
 	public Spring temp3;
+	private WalledArea walls;
+	private Wall topwall;
+	private Wall bottomwall;
+	private Wall leftwall;
+	private Wall rightwall;
+	
+	static final double WALL_MARGIN = 10;
+	static final double WALL_THICKNESS = 10;
+	
 
 	public Springies ()
 	{
@@ -45,6 +58,7 @@ public class Springies extends JGEngine
 		int height = 480;
 		double aspect = 16.0 / 9.0;
 		initEngineComponent((int) (height * aspect), height);
+		System.out.println("Display Width = " + displayWidth() + "Display Height = " + displayHeight());
 	}
 
 	@Override
@@ -73,10 +87,10 @@ public class Springies extends JGEngine
 		System.out.println("VISCOSITY MAGNITUDE: " + viscositymagnitude);
 		WorldManager.initWorld(this);
 //		WorldManager.getWorld().setGravity(new Vec2(0.0f, 0.1f));
-				addBall();
+		addBall();
 		addWalls();
 
-//		createPhysicalElements();
+		createPhysicalElements("assets/example.xml");
 
 		//		PhysicalObject fixed = new PhysicalObjectFixedMass("ball", 1, JGColor.yellow, 10, 0, displayWidth()/1.2, displayHeight()/1.2);
 
@@ -118,22 +132,39 @@ public class Springies extends JGEngine
 	{
 		// add walls to bounce off of
 		// NOTE: immovable objects must have no mass
-		final double WALL_MARGIN = 10;
-		final double WALL_THICKNESS = 10;
+		
 		final double WALL_WIDTH = displayWidth() - WALL_MARGIN * 2 + WALL_THICKNESS;
 		final double WALL_HEIGHT = displayHeight() - WALL_MARGIN * 2 + WALL_THICKNESS;
-		PhysicalObject wall = new PhysicalObjectRect("wall", 2, JGColor.green,
-				WALL_WIDTH, WALL_THICKNESS);
-		wall.setPos(displayWidth() / 2, WALL_MARGIN);
-		wall = new PhysicalObjectRect("wall", 2, JGColor.green,
-				WALL_WIDTH, WALL_THICKNESS);
-		wall.setPos(displayWidth() / 2, displayHeight() - WALL_MARGIN);
-		wall = new PhysicalObjectRect("wall", 2, JGColor.green,
-				WALL_THICKNESS, WALL_HEIGHT);
-		wall.setPos(WALL_MARGIN, displayHeight() / 2);
-		wall = new PhysicalObjectRect("wall", 2, JGColor.green,
-				WALL_THICKNESS, WALL_HEIGHT);
-		wall.setPos(displayWidth() - WALL_MARGIN, displayHeight() / 2);
+		walls = new WalledArea("walled area", 10, JGColor.yellow);
+		
+		Wall topwall = new Wall("wall", 2, JGColor.green,
+				WALL_WIDTH, WALL_THICKNESS, "top");
+		topwall.setPos(displayWidth() / 2, WALL_MARGIN);
+		
+		System.out.println("TOP WALL IS AT " + displayWidth()/2 + "," +  WALL_MARGIN);
+		
+		Wall bottomwall = new Wall("wall", 2, JGColor.green,
+				WALL_WIDTH, WALL_THICKNESS, "bottom");
+		
+		bottomwall.setPos(displayWidth() / 2, displayHeight() - WALL_MARGIN);
+		
+		double bottomwallx = displayHeight() - WALL_MARGIN;
+		
+		System.out.println("BOTTOM WALL IS AT " + displayWidth()/2 + "," + bottomwallx);
+		
+		Wall leftwall = new Wall("wall", 2, JGColor.green,
+				WALL_THICKNESS, WALL_HEIGHT, "left");
+		leftwall.setPos(WALL_MARGIN, displayHeight() / 2);
+		
+		System.out.println("LEFT WALL IS AT " + WALL_MARGIN + "," + displayHeight());
+		
+		Wall rightwall = new Wall("wall", 2, JGColor.green,
+				WALL_THICKNESS, WALL_HEIGHT, "right");
+		rightwall.setPos(displayWidth() - WALL_MARGIN, displayHeight() / 2);
+		
+		double rightwallx = displayWidth() - WALL_MARGIN; 
+		System.out.println("RIGHT WALL IS AT " + rightwallx + "," + displayHeight()/2);
+		walls.setWalls(topwall, leftwall, rightwall, bottomwall);
 	}
 
 	public HashMap<String, PhysicalObjectMass> createMasses(String[][] masses) {
@@ -185,25 +216,15 @@ public class Springies extends JGEngine
 
 	}
 
-	//	public ArrayList<ArrayList<PhysicalObjectMass>> findNetworks(String[][] springs, HashMap<String, PhysicalObject> allmasses) {
-	//		ArrayList<PhysicalObjectMass> network = new ArrayList<PhysicalObjectMass>();
-	//		
-	//		for (int i = 0; i<springs.length; i++) {
-	//			String[] currspring = springs[i];
-	//			PhysicalObjectMass currmass = (PhysicalObjectMass)allmasses.get(i);
-	//		}
-	//		
-	//		return null;
-	//		
-	//		
-	//	}
-	//	
 
 
-	public void createPhysicalElements( ) {
+
+	public void createPhysicalElements(String filename) {
 
 		ObjectsParser elements = new ObjectsParser();
-		Node doc = elements.parse("assets/ball.xml");
+		//Node doc = elements.parse("assets/ball.xml");
+		System.out.println(filename);
+		Node doc = elements.parse(filename);
 		System.out.println(doc.toString());
 
 		String[][] masses = elements.createMasses(doc);
@@ -233,8 +254,25 @@ public class Springies extends JGEngine
 
 	}
 
-
-
+	private String userSelects() {
+		JFileChooser chooser = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+		    "XML Files", "xml");
+		chooser.setFileFilter(filter);
+		int returnVal = chooser.showOpenDialog(getParent());
+		if(returnVal == JFileChooser.APPROVE_OPTION) {
+			File chosenFile = chooser.getSelectedFile();
+			String pathofFile = chosenFile.getAbsolutePath();
+			
+		    System.out.println("You chose to open this file: " + pathofFile);
+		        
+		    return pathofFile;
+		}
+		return "";
+		
+		
+	}
+	
 	@Override
 	public void doFrame ()
 	{
@@ -245,6 +283,21 @@ public class Springies extends JGEngine
 		temp.calculateSpringForce(m1.myX, m1.myY, m2.myX, m2.myY, 1, 14);
 		temp2.calculateSpringForce(m1.myX, m1.myY, m3.myX, m3.myY, 1, 14);
 		temp3.calculateSpringForce(m2.myX, m2.myY, m3.myX, m3.myY, 1, 14);
+		
+		if (getKey(KeyUp)) {
+			walls.increaseArea();
+			
+		}
+	
+		
+		if (getKey(KeyDown)) {
+			walls.reduceArea();
+			
+		}
+		if (getKey('N')) {
+			String chosenFile= userSelects();
+			createPhysicalElements(chosenFile);
+		}
 		
 	}
 
