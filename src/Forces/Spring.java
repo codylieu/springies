@@ -36,6 +36,7 @@ public class Spring extends PhysicalObject {
 		double forceY = (k * (totalDist - restLength) * yVec)/totalDist;
 		m1.setForce(forceX, forceY);
 		m2.setForce(-forceX, -forceY);
+		
 	}
 	
 	@Override
