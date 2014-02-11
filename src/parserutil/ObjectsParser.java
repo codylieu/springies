@@ -25,7 +25,7 @@ public class ObjectsParser extends Parser{
 			
 
 			String id = getNodeAttr("id", masses.get(i));
-			double x = Double.parseDouble(getNodeAttr("x", masses.get(i))) ;
+			double x = Double.parseDouble(getNodeAttr("x", masses.get(i)));
 			double y = Double.parseDouble(getNodeAttr("y", masses.get(i)))-200;
 			double mass = 1;
 			if (getNodeAttr("mass", masses.get(i)) != "")

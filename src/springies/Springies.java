@@ -51,10 +51,11 @@ public class Springies extends JGEngine
 	public Spring temp2;
 	public Spring temp3;
 	private WalledArea walls;
-	private ArrayList<Assembly> assemblies; 
+	private ArrayList<Assembly> assemblies;
 
 	static final double WALL_MARGIN = 10;
 	static final double WALL_THICKNESS = 10;
+	private Gravity g;
 
 
 	public Springies ()
@@ -92,8 +93,11 @@ public class Springies extends JGEngine
 		System.out.println("VISCOSITY MAGNITUDE: " + viscositymagnitude);
 		WorldManager.initWorld(this);
 		//		WorldManager.getWorld().setGravity(new Vec2(0.0f, 0.1f));
+		
+		assemblies = new ArrayList<Assembly>();
 		addBall();
 		addWalls();
+
 		assemblies = new ArrayList<Assembly>();
 
 
@@ -102,13 +106,14 @@ public class Springies extends JGEngine
 		//		PhysicalObject fixed = new PhysicalObjectFixedMass("ball", 1, JGColor.yellow, 10, 0, displayWidth()/1.2, displayHeight()/1.2);
 
 
+
 	}
 
 	public void addBall ()
 	{
 		// add a bouncy ball
 		// NOTE: you could make this into a separate class, but I'm lazy
-
+		
 		m1 = new PhysicalObjectMass("ball", 1, JGColor.red, 10, 5, displayWidth()/2, displayHeight()/2,0,0);
 		m2 = new PhysicalObjectMass("ball2", 1, JGColor.yellow, 10, 5, displayWidth()/2-100, displayHeight()/2-100, 0,0);
 		m3 = new PhysicalObjectMass("ball3", 1, JGColor.blue, 10, 5, displayWidth()/2-200, displayHeight()/2, 0, 0);
@@ -116,10 +121,24 @@ public class Springies extends JGEngine
 		temp = new Spring("spring", 0, JGColor.pink);
 		temp2 = new Spring("spring", 0, JGColor.magenta);
 		temp3 = new Spring("spring", 0, JGColor.orange);
+		
+		ArrayList<Spring> tempSprings = new ArrayList<Spring>();
+		ArrayList<PhysicalObjectMass> tempMasses = new ArrayList<PhysicalObjectMass>();
+		tempSprings.add(temp);
+		tempSprings.add(temp2);
+		tempSprings.add(temp3);
+		tempMasses.add(m1);
+		tempMasses.add(m2);
+		tempMasses.add(m3);
+		
 
 		temp.connect(m1, m2, 4, 20);
 		temp2.connect(m1, m3, 4, 20);
 		temp3.connect(m2, m3, 4, 20);
+		Assembly tempAssembly = new Assembly(tempMasses, tempSprings);
+		assemblies.add(tempAssembly);
+		
+		
 
 	}
 
@@ -180,8 +199,7 @@ public class Springies extends JGEngine
 			System.out.println("creatednewmass");
 			PhysicalObjectMass newmass = new PhysicalObjectMass(id, collisionId, color, radius, mass, x, y, vx, vy);
 			//						newmass.setGravity(mass, gravityvals[0], gravityvals[1]);
-			System.out.println(gravityvals[0]);
-			System.out.println(gravityvals[1]);
+			
 			allmasses.put(id, newmass);
 
 		}
@@ -231,7 +249,7 @@ public class Springies extends JGEngine
 			System.out.println("connected " + currspring[0] + " " +currspring[1]);
 			double k = Double.parseDouble(currspring[3]);
 			double restLength = Double.parseDouble(currspring[2]);
-			spring.connect(mass1, mass2, 6, restLength );
+			spring.connect(mass1, mass2, k, restLength );
 			spring.applyForce();
 
 			allSprings.add(spring);
@@ -239,11 +257,7 @@ public class Springies extends JGEngine
 
 		return allSprings;
 
-
 	}
-
-
-
 
 	public void createPhysicalElements(String filename) {
 
@@ -256,16 +270,13 @@ public class Springies extends JGEngine
 		String[][] masses = elements.createMasses(doc);
 		HashMap<String, PhysicalObjectMass> allmasses = createMasses(masses);
 
-
 		System.out.println(masses[0][0] + "TEST");
-
 
 		//String [][] fmasses = elements.createFixedMasses(doc);
 		//createFMasses(fmasses);
 		String [][]springs = elements.createSprings(doc);
 		ArrayList<Spring> springList = createSprings(springs, allmasses);
 		ArrayList<PhysicalObjectMass> massList = new ArrayList<PhysicalObjectMass>(allmasses.values());
-
 
 		Assembly assembly= new Assembly(massList, springList);
 		assemblies.add(assembly);
@@ -283,6 +294,9 @@ public class Springies extends JGEngine
 		centermass = environment.getCenterMass(environ);
 		wallvals = environment.getWalls(environ);
 
+		g = new Gravity(gravityvals[0], gravityvals[1]);
+		g.setAssembliesList(assemblies);
+	
 	}
 
 
@@ -302,12 +316,10 @@ public class Springies extends JGEngine
 		}
 		return "";
 
-
 	}
 
 
-
-	boolean FAKE_GRAVITY = false;
+	boolean GRAVITY = false;
 	boolean VISCOSITY = false;
 	boolean CENTER_OF_MASS = false;
 
@@ -321,8 +333,7 @@ public class Springies extends JGEngine
 		temp.applyForce();
 		temp2.applyForce();
 		temp3.applyForce();
-		Gravity gravity = new Gravity();
-		gravity.applyForce();
+		
 
 		checkToggle();
 	}
@@ -352,7 +363,7 @@ public class Springies extends JGEngine
 		}
 
 		if(getKey('G')){
-			FAKE_GRAVITY = !FAKE_GRAVITY;
+			GRAVITY = !GRAVITY;
 			clearKey('G');
 		}
 		if(getKey('V')){
@@ -364,10 +375,13 @@ public class Springies extends JGEngine
 			clearKey('M');
 		}
 		// Just to play around with what gravity would do
-		if(FAKE_GRAVITY){
-			m1.setForce(0, 500);
+		if(GRAVITY){
+			/*m1.setForce(0, 500);
 			m2.setForce(0, 500);
-			m3.setForce(0, 500);
+			m3.setForce(0, 500);*/
+			g.setAssembliesList(assemblies);
+			g.applyForce();
+			
 		}
 	}
 
@@ -376,7 +390,7 @@ public class Springies extends JGEngine
 	public void paintFrame (){
 		// nothing to do
 		// the objects paint themselves
-		drawString("Gravity ('g'): " + FAKE_GRAVITY, 100, 20, 0, null, JGColor.white);
+		drawString("Gravity ('g'): " + GRAVITY, 100, 20, 0, null, JGColor.white);
 		drawString("Viscosity ('v'): " + VISCOSITY, 110, 40, 0, null, JGColor.white);
 		drawString("Center of Mass ('m'): " + CENTER_OF_MASS, 140, 60, 0, null, JGColor.white);
 		if(getKey(KeyUp)){

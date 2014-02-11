@@ -36,8 +36,8 @@ public class Main
         jb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
-                sp.addBall();
-//                sp.createPhysicalElements();
+//                sp.addBall();
+                sp.createPhysicalElements("assets/ball.xml");
             }
         });
         // container that will work with user's OS
