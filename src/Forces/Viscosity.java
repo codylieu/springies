@@ -14,10 +14,8 @@ public class Viscosity extends GlobalForces{
 		magnitude = m;
 	}
 	
-	
 	@Override
 	public void applyForce() {
-		// TODO Auto-generated method stub
 		for(int assemblyidx = 0; assemblyidx  < assemblies.size(); assemblyidx ++){
 			ArrayList<PhysicalObjectMass> assemblyMasses = assemblies.get(assemblyidx).getMasses();
 			for(int massIndex = 0; massIndex < assemblyMasses.size(); massIndex++){
@@ -28,9 +26,6 @@ public class Viscosity extends GlobalForces{
 			
 				curMass.setSpeed(linearVelocity.x, linearVelocity.y);
 			}
-			
-//			setVelocity(linearVelocity.x, linearVelocity.y);
-//			myBody.setLinearVelocity(Viscosity.setViscosity(this, 0.8));	
 		}
 	}
 

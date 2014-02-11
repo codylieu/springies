@@ -15,7 +15,6 @@ public class Gravity extends GlobalForces {
 
 	@Override
 	public void applyForce() {
-		// TODO Auto-generated method stub
 		for(int i = 0; i < assemblies.size(); i++){
 			ArrayList<PhysicalObjectMass> assemblyMasses = assemblies.get(i).getMasses();
 			for(int j = 0; j < assemblyMasses.size(); j++){
