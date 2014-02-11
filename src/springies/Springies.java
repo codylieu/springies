@@ -42,6 +42,7 @@ public class Springies extends JGEngine
 	private Viscosity v;
 	private CenterOfMass com;
 	private WallRepulsion wr;
+	private PhysicalObjectMass mouseMass;
 
 	public Springies ()
 	{
@@ -64,6 +65,7 @@ public class Springies extends JGEngine
 		//		addBall();
 		addWalls();
 		//		createPhysicalElements("assets/ball.xml");
+		mouseMass = new PhysicalObjectMass("mass", -2, JGColor.white, 10, 5, 0, 0, 0, 0);
 
 	}
 
@@ -211,7 +213,7 @@ public class Springies extends JGEngine
 	boolean TOP_WALL = false;
 	boolean RIGHT_WALL = false;
 	boolean BOTTOM_WALL = false;
-
+	
 	@Override
 	public void doFrame ()
 	{
@@ -222,28 +224,29 @@ public class Springies extends JGEngine
 		//		temp2.applyForce();
 		//		temp3.applyForce();
 		checkToggle();
-		mouseDragging();
+		mouseDragging(mouseMass);
+		
 	}
-
-	private void mouseDragging(){
+	
+	public void mouseDragging(PhysicalObjectMass mouseMass){
 		if(getMouseButton(1)){
-			PhysicalObjectMass temp = new PhysicalObjectMass("mass", -1, JGColor.pink, 5, 10, getMouseX(), getMouseY(), 0, 0);
 			double curMin = Integer.MAX_VALUE;
 			PhysicalObjectMass minMass = null;
 			for(int i = 0; i < assemblies.size(); i++){
 				ArrayList<PhysicalObjectMass> assemblyMasses = assemblies.get(i).getMasses();
 				for(int j = 0; j < assemblyMasses.size(); j++){
 					PhysicalObjectMass curMass = assemblyMasses.get(j);
-					double dist = Math.sqrt(Math.pow(temp.myX - curMass.myX, 2) + Math.pow(temp.myY - curMass.myY, 2));
+					double dist = Math.sqrt(Math.pow(mouseMass.myX - curMass.myX, 2) + Math.pow(mouseMass.myY - curMass.myY, 2));
 					if(dist < curMin){
 						curMin = dist;
 						minMass = curMass;
 					}
 				}
 			}
+			mouseMass.setPos(getMouseX(), getMouseY());
 			Spring TEMPORARY = new Spring("spring", -1, JGColor.red);
-			TEMPORARY.connect(minMass, temp, 1, 20);
-			clearMouseButton(1);
+			TEMPORARY.connect(minMass, mouseMass, 1, 20);
+			
 		}
 
 	}
@@ -341,7 +344,6 @@ public class Springies extends JGEngine
 		else{
 			drawString("Wall Shrinking (down): false", 150, 100, 0, null, JGColor.white);
 		}
-
 		drawString("Wall Forces:", pfWidth() - 130, 20, 0, null, JGColor.white);
 		drawString("Left Wall ('1'): " + LEFT_WALL, pfWidth() - 130, 40, 0, null, JGColor.white);
 		drawString("Top Wall ('2'): " + TOP_WALL, pfWidth() - 130, 60, 0, null, JGColor.white);
