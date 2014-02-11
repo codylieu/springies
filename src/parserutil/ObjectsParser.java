@@ -46,8 +46,8 @@ public class ObjectsParser extends Parser{
 			massvalues[i] = massattributes;
 			
 			//PhysicalObjectMass mass = new PhysicalObjectMass(id, x, y, z, vx, vy) 
-			System.out.println(id +" " +  x  +" " +  y + " " + vx + " " + vy);
-			System.out.println(massvalues[0][0] + "Test");
+			//System.out.println(id +" " +  x  +" " +  y + " " + vx + " " + vy);
+			//System.out.println(massvalues[0][0] + "Test");
 		}
 		
 		return massvalues;
@@ -78,7 +78,7 @@ public class ObjectsParser extends Parser{
 			String[] springattributes = {a, b, Double.toString(restlength), Double.toString(k)};
 			springvalues[i] = springattributes;
 			//PhysicalObjectSpring spring = new PhysicalObjectSpring(a, b, restlength, k) 
-			System.out.println(a  +" " +  b +" " +  restlength  + " " + k);
+			//System.out.println(a  +" " +  b +" " +  restlength  + " " + k);
 		}
 		
 		return springvalues;
