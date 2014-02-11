@@ -1,8 +1,6 @@
-package jboxGlue;
+package PhysicalObjects;
 
 import org.jbox2d.common.Vec2;
-
-import PhysicalObjects.PhysicalObject;
 
 import jgame.JGColor;
 

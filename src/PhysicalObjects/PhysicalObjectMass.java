@@ -45,13 +45,6 @@ public class PhysicalObjectMass extends PhysicalObject
 		init(radius, mass, x, y, vx, vy);
 	}
 
-	public void setGravity(double mass, double direction, double magnitude){
-		double forceNet = mass * magnitude;
-		double forceX = forceNet * Math.cos((direction*Math.PI)/180);
-		double forceY = forceNet * Math.sin((direction*Math.PI)/180);
-		setForce(forceX, forceY);
-	}
-
 	public Vec2 getVelocity() {
 		Vec2 velocity = myBody.getLinearVelocity();
 		return velocity;
@@ -102,10 +95,6 @@ public class PhysicalObjectMass extends PhysicalObject
 
 
 	}
-	
-	 
-
-
 
 	public void hit (JGObject other)
 	{
