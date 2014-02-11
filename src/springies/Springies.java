@@ -369,7 +369,7 @@ public class Springies extends JGEngine
 	public void paintFrame (){
 		// nothing to do
 		// the objects paint themselves
-		drawString("Gravity ('g'): " + FAKE_GRAVITY, 100, 20, 0, null, JGColor.white);
+		drawString("Gravity ('g'): " + GRAVITY, 100, 20, 0, null, JGColor.white);
 		drawString("Viscosity ('v'): " + VISCOSITY, 110, 40, 0, null, JGColor.white);
 		drawString("Center of Mass ('m'): " + CENTER_OF_MASS, 140, 60, 0, null, JGColor.white);
 		if(getKey(KeyUp)){
