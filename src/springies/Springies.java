@@ -23,6 +23,7 @@ import com.sun.tools.javac.util.List;
 import Connectors.Spring;
 import Forces.CenterOfMass;
 import Forces.Gravity;
+import Forces.Viscosity;
 import Forces.WorldManager;
 import PhysicalObjects.Assembly;
 import PhysicalObjects.PhysicalObject;
@@ -56,6 +57,7 @@ public class Springies extends JGEngine
 	static final double WALL_MARGIN = 10;
 	static final double WALL_THICKNESS = 10;
 	private Gravity g;
+	private Viscosity v;
 
 
 	public Springies ()
@@ -296,6 +298,8 @@ public class Springies extends JGEngine
 
 		g = new Gravity(gravityvals[0], gravityvals[1]);
 		g.setAssembliesList(assemblies);
+		v = new Viscosity(viscositymagnitude);
+		v.setAssembliesList(assemblies);
 	
 	}
 
@@ -375,10 +379,12 @@ public class Springies extends JGEngine
 			clearKey('M');
 		}
 		// Just to play around with what gravity would do
+		
+		if(VISCOSITY) {
+			v.setAssembliesList(assemblies);
+			v.applyForce();
+		}
 		if(GRAVITY){
-			/*m1.setForce(0, 500);
-			m2.setForce(0, 500);
-			m3.setForce(0, 500);*/
 			g.setAssembliesList(assemblies);
 			g.applyForce();
 			
