@@ -22,6 +22,7 @@ import com.sun.tools.javac.util.List;
 
 import Connectors.Spring;
 import Forces.CenterOfMass;
+import Forces.Gravity;
 import Forces.WorldManager;
 import PhysicalObjects.Assembly;
 import PhysicalObjects.PhysicalObject;
@@ -320,13 +321,13 @@ public class Springies extends JGEngine
 		temp.applyForce();
 		temp2.applyForce();
 		temp3.applyForce();
-
+		Gravity gravity = new Gravity();
+		gravity.applyForce();
 
 		if (getKey(KeyUp)) {
 			walls.increaseArea();
 
 		}
-
 
 		if (getKey(KeyDown)) {
 			walls.reduceArea();
@@ -336,7 +337,6 @@ public class Springies extends JGEngine
 			String chosenFile= userSelects();
 			createPhysicalElements(chosenFile);
 		}
-
 
 		if(getKey('G')){
 			FAKE_GRAVITY = !FAKE_GRAVITY;
@@ -356,11 +356,6 @@ public class Springies extends JGEngine
 			m2.setForce(0, 500);
 			m3.setForce(0, 500);
 		}
-		
-		
-		
-
-
 	}
 
 
