@@ -2,7 +2,6 @@ package springies;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -25,15 +24,7 @@ import parserutil.EnvironmentParser;
 import parserutil.ObjectsParser;
 
 @SuppressWarnings("serial")
-public class Springies extends JGEngine
-
-{
-	private PhysicalObjectMass m1;
-	private PhysicalObjectMass m2;
-	private PhysicalObjectMass m3;
-	public Spring temp;
-	public Spring temp2;
-	public Spring temp3;
+public class Springies extends JGEngine{
 	private WalledArea walls;
 	private ArrayList<Assembly> assemblies;
 	static final double WALL_MARGIN = 10;
@@ -44,8 +35,7 @@ public class Springies extends JGEngine
 	private WallRepulsion wr;
 	private PhysicalObjectMass mouseMass;
 
-	public Springies ()
-	{
+	public Springies (){
 		int height = 480;
 		double aspect = 16.0 / 9.0;
 		initEngineComponent((int) (height * aspect), height);
@@ -62,25 +52,8 @@ public class Springies extends JGEngine
 		getEnvironment("assets/environment.xml");
 		WorldManager.initWorld(this);
 		assemblies = new ArrayList<Assembly>();
-		//		addBall();
 		addWalls();
-		//		createPhysicalElements("assets/ball.xml");
 		mouseMass = new PhysicalObjectMass("mass", -2, JGColor.white, 10, 5, 0, 0, 0, 0);
-
-	}
-
-	public void addBall (){
-		m1 = new PhysicalObjectMass("ball", 1, JGColor.red, 10, 5, displayWidth()/2, displayHeight()/2,0,0);
-		m2 = new PhysicalObjectMass("ball2", 1, JGColor.yellow, 10, 5, displayWidth()/2-100, displayHeight()/2-100, 0,0);
-		m3 = new PhysicalObjectMass("ball3", 1, JGColor.blue, 10, 5, displayWidth()/2-200, displayHeight()/2, 0, 0);
-
-		temp = new Spring("spring", 0, JGColor.pink);
-		temp2 = new Spring("spring", 0, JGColor.magenta);
-		temp3 = new Spring("spring", 0, JGColor.orange);
-
-		temp.connect(m1, m2, 4, 20);
-		temp2.connect(m1, m3, 4, 20);
-		temp3.connect(m2, m3, 4, 20);
 	}
 
 	private void addWalls (){
@@ -224,11 +197,11 @@ public class Springies extends JGEngine
 		//		temp2.applyForce();
 		//		temp3.applyForce();
 		checkToggle();
-		mouseDragging(mouseMass);
+//		mouseDragging(mouseMass);
 		
 	}
 	
-	public void mouseDragging(PhysicalObjectMass mouseMass){
+	/*public void mouseDragging(PhysicalObjectMass mouseMass){
 		if(getMouseButton(1)){
 			double curMin = Integer.MAX_VALUE;
 			PhysicalObjectMass minMass = null;
@@ -249,7 +222,7 @@ public class Springies extends JGEngine
 			
 		}
 
-	}
+	}*/
 
 	private void checkToggle() {
 		if(getKey('C')) {
