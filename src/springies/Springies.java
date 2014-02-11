@@ -3,34 +3,20 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.w3c.dom.Node;
 
-import jgame.*;
-import jgame.platform.*;
 import jgame.JGColor;
-import jgame.JGObject;
 import jgame.platform.JGEngine;
 
-import org.jbox2d.common.Vec2;
-
-import com.sun.tools.javac.util.List;
-
 import Connectors.Spring;
-import Forces.CenterOfMass;
 import Forces.Gravity;
 import Forces.Viscosity;
 import Forces.WorldManager;
 import PhysicalObjects.Assembly;
-import PhysicalObjects.PhysicalObject;
-import PhysicalObjects.PhysicalObjectCircle;
-import PhysicalObjects.PhysicalObjectFixedMass;
 import PhysicalObjects.PhysicalObjectMass;
-import PhysicalObjects.PhysicalObjectRect;
 import PhysicalObjects.Wall;
 import PhysicalObjects.WalledArea;
 import parserutil.EnvironmentParser;
@@ -41,10 +27,6 @@ import parserutil.ObjectsParser;
 public class Springies extends JGEngine
 
 {
-	private double [] gravityvals;
-	private double viscositymagnitude;
-	private double [] centermass;
-	private double[][] wallvals;
 	private PhysicalObjectMass m1;
 	private PhysicalObjectMass m2;
 	private PhysicalObjectMass m3;
@@ -67,7 +49,6 @@ public class Springies extends JGEngine
 		int height = 480;
 		double aspect = 16.0 / 9.0;
 		initEngineComponent((int) (height * aspect), height);
-		System.out.println("Display Width = " + displayWidth() + "Display Height = " + displayHeight());
 	}
 
 	@Override
@@ -93,20 +74,14 @@ public class Springies extends JGEngine
 		// so gravity is up in world coords and down in game coords
 		// so set all directions (e.g., forces, velocities) in world coords
 		getEnvironment("assets/environment.xml");
-		System.out.println("VISCOSITY MAGNITUDE: " + viscositymagnitude);
 		WorldManager.initWorld(this);
 		//		WorldManager.getWorld().setGravity(new Vec2(0.0f, 0.1f));
 		
 		assemblies = new ArrayList<Assembly>();
 		addBall();
 		addWalls();
-
+		createPhysicalElements("assets/ball2.xml");
 		
-
-
-		createPhysicalElements("assets/ball.xml");
-		
-		//		PhysicalObject fixed = new PhysicalObjectFixedMass("ball", 1, JGColor.yellow, 10, 0, displayWidth()/1.2, displayHeight()/1.2);
 
 		
 	}
@@ -138,6 +113,7 @@ public class Springies extends JGEngine
 		temp3.connect(m2, m3, 4, 20);
 		Assembly tempAssembly = new Assembly(tempMasses, tempSprings);
 		assemblies.add(tempAssembly);
+		
 	}
 
 	private void addWalls ()
@@ -177,7 +153,7 @@ public class Springies extends JGEngine
 		walls.setWalls(topwall, leftwall, rightwall, bottomwall);
 	}
 
-	public HashMap<String, PhysicalObjectMass> implementMasses(String[][] masses) {
+	private HashMap<String, PhysicalObjectMass> implementMasses(String[][] masses) {
 		PhysicalObjectMass newmass;
 
 		HashMap<String, PhysicalObjectMass> allmasses = new HashMap<String, PhysicalObjectMass>();
@@ -196,16 +172,12 @@ public class Springies extends JGEngine
 			
 			newmass = new PhysicalObjectMass(id, collisionId, color, radius, mass, x, y, vx, vy);
 			
-			//						newmass.setGravity(mass, gravityvals[0], gravityvals[1]);
 			
 			allmasses.put(id, newmass);
 
 		}
 
-		//		CenterOfMass com = new CenterOfMass("com", 5, JGColor.green);
-		//		com.setCOMForce(allmasses);
 
-		System.out.println(allmasses.toString());
 		return allmasses; 
 
 	}
@@ -233,7 +205,7 @@ public class Springies extends JGEngine
 
 
 
-	public ArrayList<Spring> implementSprings(String[][] springs, HashMap<String, PhysicalObjectMass> allmasses) {
+	private ArrayList<Spring> implementSprings(String[][] springs, HashMap<String, PhysicalObjectMass> allmasses) {
 		ArrayList<Spring> allSprings = new ArrayList<Spring>();
 
 		for (int i = 0; i< springs.length; i++) {
@@ -247,7 +219,7 @@ public class Springies extends JGEngine
 			//System.out.println("connected " + currspring[0] + " " +currspring[1]);
 			double k = Double.parseDouble(currspring[3]);
 			double restLength = Double.parseDouble(currspring[2]);
-			spring.connect(mass1, mass2, k, restLength );
+			spring.connect(mass1, mass2, 30, restLength );
 			spring.applyForce();
 
 			allSprings.add(spring);
@@ -268,7 +240,6 @@ public class Springies extends JGEngine
 		String[][] masses = elements.createMasses(doc);
 		HashMap<String, PhysicalObjectMass> allmasses = this.implementMasses(masses);
 
-		//System.out.println(masses[0][0] + "TEST");
 
 		//String [][] fmasses = elements.createFixedMasses(doc);
 		//createFMasses(fmasses);
@@ -284,14 +255,14 @@ public class Springies extends JGEngine
 		//createMuscles(muscles);
 	}
 
-	public void getEnvironment(String filename) {
+	private void getEnvironment(String filename) {
 
 		EnvironmentParser environment = new EnvironmentParser();
 		Node environ = environment.parse(filename);
-		gravityvals = environment.getGravity(environ);
-		viscositymagnitude = environment.getViscosity(environ);
-		centermass = environment.getCenterMass(environ);
-		wallvals = environment.getWalls(environ);
+		double [] gravityvals = environment.getGravity(environ);
+		double viscositymagnitude = environment.getViscosity(environ);
+		double [] centermass = environment.getCenterMass(environ);
+		double[][] wallvals = environment.getWalls(environ);
 
 		g = new Gravity(gravityvals[0], gravityvals[1]);
 		g.setAssembliesList(assemblies);
@@ -301,7 +272,7 @@ public class Springies extends JGEngine
 	}
 
 
-	private String userSelects() {
+	public String userSelects() {
 		JFileChooser chooser = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
 				"XML Files", "xml");

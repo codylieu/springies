@@ -8,8 +8,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-import jgame.JGColor;
-
 
 /**
  * Creates window that can be moved, resized, and closed by the user.
@@ -32,14 +30,19 @@ public class Main
     {
         // view of user's content
         final Springies sp = new Springies();
-        JButton jb = new JButton("Make new Ball");
+        JButton jb = new JButton("Make new Assembly");
         jb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
                 //sp.addBall();
-                sp.createPhysicalElements("assets/ball.xml");
+                String chosenFile= sp.userSelects();
+    			sp.createPhysicalElements(chosenFile);
+                //sp.createPhysicalElements("assets/ball2.xml");
             }
         });
+        
+        
+        
         // container that will work with user's OS
         JFrame frame = new JFrame(TITLE);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -51,5 +54,8 @@ public class Main
         frame.pack();
         frame.setVisible(true);
     }
+    
+    
+    
 
 }
