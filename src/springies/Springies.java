@@ -115,7 +115,6 @@ public class Springies extends JGEngine
 	{
 		// add a bouncy ball
 		// NOTE: you could make this into a separate class, but I'm lazy
-		
 		m1 = new PhysicalObjectMass("ball", 1, JGColor.red, 10, 5, displayWidth()/2, displayHeight()/2,0,0);
 		m2 = new PhysicalObjectMass("ball2", 1, JGColor.yellow, 10, 5, displayWidth()/2-100, displayHeight()/2-100, 0,0);
 		m3 = new PhysicalObjectMass("ball3", 1, JGColor.blue, 10, 5, displayWidth()/2-200, displayHeight()/2, 0, 0);
@@ -139,9 +138,6 @@ public class Springies extends JGEngine
 		temp3.connect(m2, m3, 4, 20);
 		Assembly tempAssembly = new Assembly(tempMasses, tempSprings);
 		assemblies.add(tempAssembly);
-		
-		
-
 	}
 
 	private void addWalls ()
@@ -321,7 +317,6 @@ public class Springies extends JGEngine
 
 	}
 
-
 	boolean GRAVITY = false;
 	boolean VISCOSITY = false;
 	boolean CENTER_OF_MASS = false;
@@ -353,12 +348,10 @@ public class Springies extends JGEngine
 
 		if (getKey(KeyUp)) {
 			walls.increaseArea();
-
 		}
 
 		if (getKey(KeyDown)) {
 			walls.reduceArea();
-
 		}
 		if (getKey('N')) {
 			String chosenFile= userSelects();
@@ -378,7 +371,6 @@ public class Springies extends JGEngine
 			clearKey('M');
 		}
 		// Just to play around with what gravity would do
-		
 		if(VISCOSITY) {
 			v.setAssembliesList(assemblies);
 			v.applyForce();
@@ -386,7 +378,6 @@ public class Springies extends JGEngine
 		if(GRAVITY){
 			g.setAssembliesList(assemblies);
 			g.applyForce();
-			
 		}
 	}
 
