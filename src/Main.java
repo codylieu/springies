@@ -8,8 +8,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-import jgame.JGColor;
-
 
 /**
  * Creates window that can be moved, resized, and closed by the user.
@@ -43,4 +41,5 @@ public class Main
 		frame.pack();
 		frame.setVisible(true);
 	}
+
 }
