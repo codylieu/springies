@@ -95,10 +95,10 @@ public class Springies extends JGEngine
 		addBall();
 		addWalls();
 		assemblies = new ArrayList<Assembly>();
-		
+
 
 		createPhysicalElements("assets/example.xml");
-
+		
 		//		PhysicalObject fixed = new PhysicalObjectFixedMass("ball", 1, JGColor.yellow, 10, 0, displayWidth()/1.2, displayHeight()/1.2);
 
 
@@ -188,7 +188,7 @@ public class Springies extends JGEngine
 
 		//		CenterOfMass com = new CenterOfMass("com", 5, JGColor.green);
 		//		com.setCOMForce(allmasses);
-		
+
 		System.out.println(allmasses.toString());
 		return allmasses; 
 
@@ -219,12 +219,12 @@ public class Springies extends JGEngine
 
 	public ArrayList<Spring> createSprings(String[][] springs, HashMap<String, PhysicalObjectMass> allmasses) {
 		ArrayList<Spring> allSprings = new ArrayList<Spring>();
-		
+
 		for (int i = 0; i< springs.length; i++) {
 			String[] currspring = springs[i];
 			Spring spring = new Spring("spring", 1, JGColor.yellow);
-			
-			
+
+
 			PhysicalObjectMass mass1 = allmasses.get(currspring[0]); 
 			PhysicalObjectMass mass2 = allmasses.get(currspring[1]);
 
@@ -233,12 +233,12 @@ public class Springies extends JGEngine
 			double restLength = Double.parseDouble(currspring[2]);
 			spring.connect(mass1, mass2, 6, restLength );
 			spring.applyForce();
-			
+
 			allSprings.add(spring);
 		}
-		
+
 		return allSprings;
-		
+
 
 	}
 
@@ -255,8 +255,8 @@ public class Springies extends JGEngine
 
 		String[][] masses = elements.createMasses(doc);
 		HashMap<String, PhysicalObjectMass> allmasses = createMasses(masses);
-		
-		
+
+
 		System.out.println(masses[0][0] + "TEST");
 
 
@@ -265,11 +265,11 @@ public class Springies extends JGEngine
 		String [][]springs = elements.createSprings(doc);
 		ArrayList<Spring> springList = createSprings(springs, allmasses);
 		ArrayList<PhysicalObjectMass> massList = new ArrayList<PhysicalObjectMass>(allmasses.values());
-		
-		
+
+
 		Assembly assembly= new Assembly(massList, springList);
 		assemblies.add(assembly);
-		
+
 		//String [][] muscles = elements.createMuscles(doc);
 		//createMuscles(muscles);
 	}
@@ -323,6 +323,19 @@ public class Springies extends JGEngine
 		temp3.applyForce();
 		Gravity gravity = new Gravity();
 		gravity.applyForce();
+
+		checkToggle();
+	}
+
+	private void checkToggle() {
+		if(getKey('C')) {
+			if (assemblies.size()>0) {
+				for (Assembly assembly: assemblies) {
+					assembly.remove();
+				}
+			}
+
+		}
 
 		if (getKey(KeyUp)) {
 			walls.increaseArea();

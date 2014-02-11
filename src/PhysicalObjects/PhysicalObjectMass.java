@@ -50,10 +50,14 @@ public class PhysicalObjectMass extends PhysicalObject
 		return velocity;
 	}
 
+	
+	
 //	private void initViscosity(){
 //		myBody.setLinearVelocity(Viscosity.setViscosity(this, 0.8));
 //	}
 
+	
+	
 	public void move(){
 		// if the JGame object was deleted, remove the physical object too
 		if (myBody.m_world != WorldManager.getWorld()) {
