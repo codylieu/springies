@@ -19,12 +19,11 @@ public class Gravity extends GlobalForces {
 			ArrayList<PhysicalObjectMass> assemblyMasses = assemblies.get(assemblyidx).getMasses();
 			for(int massIndex = 0; massIndex < assemblyMasses.size(); massIndex++){
 				PhysicalObjectMass curMass = assemblyMasses.get(massIndex);
-				double forceNet = curMass.myMass * magnitude;
+				double forceNet = curMass.getMass() * magnitude;
 				double forceX = forceNet * Math.cos((direction*Math.PI)/180);
 				double forceY = forceNet * Math.sin((direction*Math.PI)/180);
 				curMass.setForce(forceX, forceY);
 			}
 		}
 	}
-
 }

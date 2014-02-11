@@ -9,17 +9,21 @@ public class Muscle extends Spring{
 	
 	public Muscle(String name, int collisionId, JGColor color) {
 		super(name, collisionId, color);
-		// TODO Auto-generated constructor stub
 	}
 
 	protected PhysicalObjectMass m1;
 	protected PhysicalObjectMass m2;
 	private double myRestLength;
 	private double myK;
-	
-	// Unique to Muscles
-	private double amplitude;
+	private static double amplitude;
 	private double timer = 0;
+	
+	public static double getAmplitude(){
+		return amplitude;
+	}
+	public static void setAmplitude(double a){
+		amplitude = a;
+	}
 
 	@Override
 	public void applyForce(){
@@ -36,4 +40,5 @@ public class Muscle extends Spring{
 	public void paintShape(){
 		timer++;
 	}
+
 }

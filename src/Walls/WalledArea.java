@@ -10,7 +10,6 @@ import jgame.JGColor;
 
 public class WalledArea extends PhysicalObject {
 	
-
 	private Wall topWall;
 	private Wall leftWall;
 	private Wall rightWall;
@@ -27,28 +26,21 @@ public class WalledArea extends PhysicalObject {
 		allpositions.put(leftWall, leftWall.getMidPoint());
 		allpositions.put(rightWall, rightWall.getMidPoint());
 		allpositions.put(rightWall, rightWall.getMidPoint());
-		
-		
 		return allpositions;
-		
 	}
 	
 	public void setWalls(Wall w1, Wall w2, Wall w3, Wall w4)  {
-		
 		topWall = w1;
 		leftWall = w2;
 		rightWall = w3;
 		bottomWall = w4;
-		
 	}
 	
 	public void reduceArea() {
-		
 		topWall.reduceArea();
 		leftWall.reduceArea();
 		rightWall.reduceArea();
 		bottomWall.reduceArea();	
-		
 	}
 	
 	public void increaseArea() {
@@ -56,15 +48,9 @@ public class WalledArea extends PhysicalObject {
 		rightWall.increaseArea();
 		leftWall.increaseArea();
 		bottomWall.increaseArea();
-		
 	}
-	
-
 	
 	@Override
 	protected void paintShape() {
-		// TODO Auto-generated method stub
-
 	}
-
 }

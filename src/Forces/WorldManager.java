@@ -5,16 +5,13 @@ import org.jbox2d.collision.AABB;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 
-
-public class WorldManager
-{
+public class WorldManager{
 	public static World ourWorld;
 	static {
 		ourWorld = null;
 	}
 
-	public static World getWorld ()
-	{
+	public static World getWorld(){
 		if (ourWorld == null){
 			throw new RuntimeException("call initWorld() before getWorld()!");
 		}

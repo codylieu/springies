@@ -14,9 +14,8 @@ public abstract class GlobalForces implements IForce{
 	
 	@Override
 	public abstract void applyForce();
-	
+
 	public void setAssembliesList(ArrayList<Assembly> list) {
 		assemblies = list;
 	}
-
 }

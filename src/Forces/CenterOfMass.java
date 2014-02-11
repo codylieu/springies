@@ -23,17 +23,14 @@ public class CenterOfMass extends GlobalForces{
 		double denomCOM = 0;
 		for(int i = 0; i < masses.size(); i++){
 			PhysicalObjectMass curMass = masses.get(i);
-			numerCOMX += curMass.myMass * curMass.myX;
-			numerCOMY += curMass.myMass * curMass.myY;
-			denomCOM += curMass.myMass;
+			numerCOMX += curMass.getMass() * curMass.getX();
+			numerCOMY += curMass.getMass() * curMass.getY();
+			denomCOM += curMass.getMass();
 		}
-
 		double comX = numerCOMX/denomCOM;
 		double comY = numerCOMY/denomCOM;
-
 		coordinatesCOM[0] = comX;
 		coordinatesCOM[1] = comY;
-
 		return coordinatesCOM;
 	}
 
@@ -44,9 +41,9 @@ public class CenterOfMass extends GlobalForces{
 			Double[] coordinatesCOM = findCOM(assemblyMasses);
 			for(int j = 0; j < assemblyMasses.size(); j++){
 				PhysicalObjectMass curMass = assemblyMasses.get(j);
-				double dist = Math.sqrt(Math.pow(coordinatesCOM[0] - curMass.myX, 2) + Math.pow(coordinatesCOM[1] - curMass.myY, 2));
-				double xVec = coordinatesCOM[0] - curMass.myX;
-				double yVec = coordinatesCOM[1] - curMass.myY;
+				double dist = Math.sqrt(Math.pow(coordinatesCOM[0] - curMass.getX(), 2) + Math.pow(coordinatesCOM[1] - curMass.getY(), 2));
+				double xVec = coordinatesCOM[0] - curMass.getX();
+				double yVec = coordinatesCOM[1] - curMass.getY();
 				double forceX = (xVec * magnitude) / Math.pow(dist, exponent);
 				double forceY = (yVec * magnitude) / Math.pow(dist, exponent);
 				if(dist < 100){
@@ -58,5 +55,4 @@ public class CenterOfMass extends GlobalForces{
 			}
 		}
 	}
-
 }

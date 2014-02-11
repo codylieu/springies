@@ -69,9 +69,4 @@ public class Wall extends PhysicalObjectRect {
 		}
 		this.setPos(x, y);
 	}
-	
-	
-	
-	
-
 }

@@ -17,9 +17,9 @@ public class TriangleConfiguration extends PhysicalObject{
 	private PhysicalObjectMass m1;
 	private PhysicalObjectMass m2;
 	private PhysicalObjectMass m3;
-	public Spring temp;
-	public Spring temp2;
-	public Spring temp3;
+	private Spring temp;
+	private Spring temp2;
+	private Spring temp3;
 	
 	public void build(){
 		m1 = new PhysicalObjectMass("ball", 1, JGColor.red, 10, 5, 400, 240,0,0);
