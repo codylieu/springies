@@ -105,8 +105,8 @@ public class Springies extends JGEngine
 
 	private HashMap<String, PhysicalObjectMass> implementMasses(String[][] masses) {
 		HashMap<String, PhysicalObjectMass> allmasses = new HashMap<String, PhysicalObjectMass>();
-		for (int i = 0; i< masses.length; i++) {
-			String[] currmass = masses[i];
+		for (int springIdx = 0; springIdx< masses.length; springIdx++) {
+			String[] currmass = masses[springIdx];
 			String id = currmass[0];
 			int collisionId = 1;
 			JGColor color = JGColor.green;
@@ -122,34 +122,16 @@ public class Springies extends JGEngine
 
 			allmasses.put(id, newmass);
 		}
-		System.out.println(allmasses.toString());
 		return allmasses;
 
 	}
 
-	public double[] averageLocation(HashMap<String, PhysicalObjectMass> allmasses) {
-		double[] location = new double[2];
-
-		double totalx = 0;
-		double totaly = 0 ;
-
-		for (Map.Entry entry : allmasses.entrySet()) {
-			PhysicalObjectMass currmass = (PhysicalObjectMass) entry.getValue();
-			totalx += currmass.myX;
-			totaly += currmass.myY;
-			System.out.print("key,val: ");
-			System.out.println(entry.getKey() + "," + entry.getValue());
-		}
-		location[0] = totalx;
-		location[1] = totaly; 
-		return location;
-	}
 
 	private ArrayList<Spring> implementSprings(String[][] springs, HashMap<String, PhysicalObjectMass> allmasses) {
 		ArrayList<Spring> allSprings = new ArrayList<Spring>();
 
-		for (int i = 0; i< springs.length; i++) {
-			String[] currspring = springs[i];
+		for (int springIdx = 0; springIdx< springs.length; springIdx++) {
+			String[] currspring = springs[springIdx];
 			Spring spring = new Spring("spring", 1, JGColor.yellow);
 
 			PhysicalObjectMass mass1 = allmasses.get(currspring[0]); 
@@ -172,9 +154,7 @@ public class Springies extends JGEngine
 	public void createPhysicalElements(String filename) {
 
 		ObjectsParser elements = new ObjectsParser();
-		System.out.println(filename);
 		Node doc = elements.parse(filename);
-		System.out.println(doc.toString());
 
 		String[][] masses = elements.createMasses(doc);
 		HashMap<String, PhysicalObjectMass> allmasses = this.implementMasses(masses);
