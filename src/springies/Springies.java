@@ -95,12 +95,10 @@ public class Springies extends JGEngine
 		addBall();
 		addWalls();
 		assemblies = new ArrayList<Assembly>();
-		
 
 		createPhysicalElements("assets/example.xml");
-
-		//		PhysicalObject fixed = new PhysicalObjectFixedMass("ball", 1, JGColor.yellow, 10, 0, displayWidth()/1.2, displayHeight()/1.2);
-
+		
+		PhysicalObjectFixedMass fixed= new PhysicalObjectFixedMass("fixed", -1, JGColor.red, 10, pfWidth()/2, pfHeight()/2);
 
 	}
 

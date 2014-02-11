@@ -2,9 +2,11 @@ package Connectors;
 
 import PhysicalObjects.PhysicalObjectMass;
 import jgame.JGColor;
+import jgame.JGObject;
+import jgame.JGTimer;
 
 public class Muscle extends Spring{
-
+	
 	public Muscle(String name, int collisionId, JGColor color) {
 		super(name, collisionId, color);
 		// TODO Auto-generated constructor stub
@@ -17,7 +19,7 @@ public class Muscle extends Spring{
 	
 	// Unique to Muscles
 	private double amplitude;
-	private double timer; // Find a better way to do this
+	private double timer = 0;
 
 	@Override
 	public void applyForce(){
@@ -29,5 +31,9 @@ public class Muscle extends Spring{
 		double forceY = (myK * (totalDist - rest) * yVec)/totalDist;
 		m1.setForce(forceX, forceY);
 		m2.setForce(-forceX, -forceY);
+	}
+	
+	public void paintShape(){
+		timer++;
 	}
 }

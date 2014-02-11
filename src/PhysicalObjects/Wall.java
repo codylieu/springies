@@ -27,24 +27,24 @@ public class Wall extends PhysicalObjectRect {
 		if (type.equals("top")) {
 			
 			if (y >10.0) {
-				y = y - 1;
+				y--;
 			}
 			
 		} else if (type.equals("bottom")) {
 			if (y < 470.0) {
-				y = y +1;
+				y++;
 			}
 			
 			
 		} else if (type.equals("right")) {
 			if (x < 843.0) {
-				x = x + 1; 
+				x++; 
 			}
 			
 		} else if (type.equals("left")) {
-			//if (x > 10.0) {
-				x = x - 1;
-			//}
+			if (x > 10.0) {
+				x--;
+			}
 			
 		}
 		this.setPos(x, y);
@@ -55,18 +55,18 @@ public class Wall extends PhysicalObjectRect {
 		Vec2 position = myBody.getPosition();
 		if (type.equals("top")) {
 			
-			y = position.y + 1;
+			y++;
 			
 		} else if (type.equals("bottom")) {
 			
-			y = position.y - 1;
+			y--;
 			
 		} else if (type.equals("right")) {
 			
-			x = position.x - 1;
+			x--;
 			
 		} else if (type.equals("left")) {
-			x = position.x + 1; 
+			x++; 
 		}
 		this.setPos(x, y);
 	}
