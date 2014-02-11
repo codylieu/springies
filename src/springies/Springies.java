@@ -52,6 +52,7 @@ public class Springies extends JGEngine
 	public Spring temp3;
 	private WalledArea walls;
 	private ArrayList<Assembly> assemblies;
+	
 
 	static final double WALL_MARGIN = 10;
 	static final double WALL_THICKNESS = 10;
@@ -143,33 +144,31 @@ public class Springies extends JGEngine
 				WALL_WIDTH, WALL_THICKNESS, "top");
 		topwall.setPos(displayWidth() / 2, WALL_MARGIN);
 
-		System.out.println("TOP WALL IS AT " + displayWidth()/2 + "," +  WALL_MARGIN);
-
+		
 		Wall bottomwall = new Wall("wall", 2, JGColor.green,
 				WALL_WIDTH, WALL_THICKNESS, "bottom");
 
 		bottomwall.setPos(displayWidth() / 2, displayHeight() - WALL_MARGIN);
 
-		double bottomwallx = displayHeight() - WALL_MARGIN;
-
-		System.out.println("BOTTOM WALL IS AT " + displayWidth()/2 + "," + bottomwallx);
+		
+		
 
 		Wall leftwall = new Wall("wall", 2, JGColor.green,
 				WALL_THICKNESS, WALL_HEIGHT, "left");
 		leftwall.setPos(WALL_MARGIN, displayHeight() / 2);
 
-		System.out.println("LEFT WALL IS AT " + WALL_MARGIN + "," + displayHeight());
+		
 
 		Wall rightwall = new Wall("wall", 2, JGColor.green,
 				WALL_THICKNESS, WALL_HEIGHT, "right");
 		rightwall.setPos(displayWidth() - WALL_MARGIN, displayHeight() / 2);
 
-		double rightwallx = displayWidth() - WALL_MARGIN; 
-		System.out.println("RIGHT WALL IS AT " + rightwallx + "," + displayHeight()/2);
+		 
+		
 		walls.setWalls(topwall, leftwall, rightwall, bottomwall);
 	}
 
-	public HashMap<String, PhysicalObjectMass> createMasses(String[][] masses) {
+	public HashMap<String, PhysicalObjectMass> implementMasses(String[][] masses) {
 
 		HashMap<String, PhysicalObjectMass> allmasses = new HashMap<String, PhysicalObjectMass>();
 		for (int i = 0; i< masses.length; i++) {
@@ -217,7 +216,7 @@ public class Springies extends JGEngine
 
 	}
 
-	public ArrayList<Spring> createSprings(String[][] springs, HashMap<String, PhysicalObjectMass> allmasses) {
+	public ArrayList<Spring> implementSprings(String[][] springs, HashMap<String, PhysicalObjectMass> allmasses) {
 		ArrayList<Spring> allSprings = new ArrayList<Spring>();
 
 		for (int i = 0; i< springs.length; i++) {
@@ -228,7 +227,7 @@ public class Springies extends JGEngine
 			PhysicalObjectMass mass1 = allmasses.get(currspring[0]); 
 			PhysicalObjectMass mass2 = allmasses.get(currspring[1]);
 
-			System.out.println("connected " + currspring[0] + " " +currspring[1]);
+			//System.out.println("connected " + currspring[0] + " " +currspring[1]);
 			double k = Double.parseDouble(currspring[3]);
 			double restLength = Double.parseDouble(currspring[2]);
 			spring.connect(mass1, mass2, k, restLength);
@@ -250,14 +249,15 @@ public class Springies extends JGEngine
 		System.out.println(doc.toString());
 
 		String[][] masses = elements.createMasses(doc);
-		HashMap<String, PhysicalObjectMass> allmasses = createMasses(masses);
+		HashMap<String, PhysicalObjectMass> allmasses = this.implementMasses(masses);
 
-		System.out.println(masses[0][0] + "TEST");
+		//System.out.println(masses[0][0] + "TEST");
 
 		//String [][] fmasses = elements.createFixedMasses(doc);
 		//createFMasses(fmasses);
+		
 		String [][]springs = elements.createSprings(doc);
-		ArrayList<Spring> springList = createSprings(springs, allmasses);
+		ArrayList<Spring> springList = this.implementSprings(springs, allmasses);
 		ArrayList<PhysicalObjectMass> massList = new ArrayList<PhysicalObjectMass>(allmasses.values());
 
 		Assembly assembly= new Assembly(massList, springList);
@@ -295,8 +295,6 @@ public class Springies extends JGEngine
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 			File chosenFile = chooser.getSelectedFile();
 			String pathofFile = chosenFile.getAbsolutePath();
-
-			System.out.println("You chose to open this file: " + pathofFile);
 
 			return pathofFile;
 		}

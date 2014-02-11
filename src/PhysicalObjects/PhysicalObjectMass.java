@@ -50,9 +50,8 @@ public class PhysicalObjectMass extends PhysicalObject
 		Vec2 velocity = myBody.getLinearVelocity();
 		return velocity;
 	}
+	
 
-	
-	
 //	private void initViscosity(){
 //		myBody.setLinearVelocity(Viscosity.setViscosity(this, 0.8));
 //	}
@@ -76,8 +75,8 @@ public class PhysicalObjectMass extends PhysicalObject
 	private void init (double radius, double mass, double x, double y, double vx, double vy)
 	{
 		// save arguments
-		myRadius = 10;
-		myMass = 5;
+		myRadius = radius;
+		myMass = mass;
 		myX = x;
 		myY = y;
 		int intRadius = (int)radius;
