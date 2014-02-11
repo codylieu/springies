@@ -15,10 +15,10 @@ public class Gravity extends GlobalForces {
 
 	@Override
 	public void applyForce() {
-		for(int i = 0; i < assemblies.size(); i++){
-			ArrayList<PhysicalObjectMass> assemblyMasses = assemblies.get(i).getMasses();
-			for(int j = 0; j < assemblyMasses.size(); j++){
-				PhysicalObjectMass curMass = assemblyMasses.get(j);
+		for(int assemblyidx = 0; assemblyidx < assemblies.size(); assemblyidx++){
+			ArrayList<PhysicalObjectMass> assemblyMasses = assemblies.get(assemblyidx).getMasses();
+			for(int massIndex = 0; massIndex < assemblyMasses.size(); massIndex++){
+				PhysicalObjectMass curMass = assemblyMasses.get(massIndex);
 				double forceNet = curMass.myMass * magnitude;
 				double forceX = forceNet * Math.cos((direction*Math.PI)/180);
 				double forceY = forceNet * Math.sin((direction*Math.PI)/180);

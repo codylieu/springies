@@ -133,27 +133,21 @@ public class Springies extends JGEngine
 
 		bottomwall.setPos(displayWidth() / 2, displayHeight() - WALL_MARGIN);
 
-		
-		
-
 		Wall leftwall = new Wall("wall", 2, JGColor.green,
 				WALL_THICKNESS, WALL_HEIGHT, "left");
 		leftwall.setPos(WALL_MARGIN, displayHeight() / 2);
 
-		
-
+	
 		Wall rightwall = new Wall("wall", 2, JGColor.green,
 				WALL_THICKNESS, WALL_HEIGHT, "right");
 		rightwall.setPos(displayWidth() - WALL_MARGIN, displayHeight() / 2);
 
-		 
-		
+	
 		walls.setWalls(topwall, leftwall, rightwall, bottomwall);
 	}
 
 
 	private HashMap<String, PhysicalObjectMass> implementMasses(String[][] masses) {
-
 
 		HashMap<String, PhysicalObjectMass> allmasses = new HashMap<String, PhysicalObjectMass>();
 		for (int i = 0; i< masses.length; i++) {
@@ -170,37 +164,13 @@ public class Springies extends JGEngine
 			double vy = Double.parseDouble(currmass[5]);
 			
 			PhysicalObjectMass newmass = new PhysicalObjectMass(id, collisionId, color, radius, mass, x, y, vx, vy);
-
-			
 			allmasses.put(id, newmass);
 
 		}
-
-
 		return allmasses; 
 
 	}
 
-	public double[] averageLocation(HashMap<String, PhysicalObjectMass> allmasses) {
-		double[] location = new double[2];
-
-		double totalx = 0;
-		double totaly = 0 ;
-
-
-		for (Map.Entry entry : allmasses.entrySet()) {
-			PhysicalObjectMass currmass = (PhysicalObjectMass) entry.getValue();
-			totalx += currmass.myX;
-			totaly += currmass.myY;
-			System.out.print("key,val: ");
-			System.out.println(entry.getKey() + "," + entry.getValue());
-		}
-		location[0] = totalx;
-		location[1] = totaly; 
-		return location; 
-
-
-	}
 
 
 
@@ -216,7 +186,6 @@ public class Springies extends JGEngine
 			PhysicalObjectMass mass1 = allmasses.get(currspring[0]); 
 			PhysicalObjectMass mass2 = allmasses.get(currspring[1]);
 
-			//System.out.println("connected " + currspring[0] + " " +currspring[1]);
 			double k = Double.parseDouble(currspring[3]);
 			double restLength = Double.parseDouble(currspring[2]);
 
