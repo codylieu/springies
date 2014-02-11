@@ -42,9 +42,9 @@ public class Wall extends PhysicalObjectRect {
 			}
 			
 		} else if (type.equals("left")) {
-			if (x > 10.0) {
+			//if (x > 10.0) {
 				x = x - 1;
-			}
+			//}
 			
 		}
 		this.setPos(x, y);
