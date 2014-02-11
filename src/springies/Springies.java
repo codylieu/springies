@@ -23,6 +23,7 @@ import com.sun.tools.javac.util.List;
 import Connectors.Spring;
 import Forces.CenterOfMass;
 import Forces.Gravity;
+import Forces.Viscosity;
 import Forces.WorldManager;
 import PhysicalObjects.Assembly;
 import PhysicalObjects.PhysicalObject;
@@ -56,6 +57,7 @@ public class Springies extends JGEngine
 	static final double WALL_MARGIN = 10;
 	static final double WALL_THICKNESS = 10;
 	private Gravity g;
+	private Viscosity v;
 
 
 	public Springies ()
@@ -97,8 +99,16 @@ public class Springies extends JGEngine
 		assemblies = new ArrayList<Assembly>();
 		addBall();
 		addWalls();
-		createPhysicalElements("assets/ball.xml");
+
+		assemblies = new ArrayList<Assembly>();
+
+
+		createPhysicalElements("assets/example.xml");
 		
+		//		PhysicalObject fixed = new PhysicalObjectFixedMass("ball", 1, JGColor.yellow, 10, 0, displayWidth()/1.2, displayHeight()/1.2);
+
+
+
 	}
 
 	public void addBall ()
@@ -194,6 +204,7 @@ public class Springies extends JGEngine
 
 		//		CenterOfMass com = new CenterOfMass("com", 5, JGColor.green);
 		//		com.setCOMForce(allmasses);
+
 		System.out.println(allmasses.toString());
 		return allmasses; 
 
@@ -224,12 +235,12 @@ public class Springies extends JGEngine
 
 	public ArrayList<Spring> createSprings(String[][] springs, HashMap<String, PhysicalObjectMass> allmasses) {
 		ArrayList<Spring> allSprings = new ArrayList<Spring>();
-		
+
 		for (int i = 0; i< springs.length; i++) {
 			String[] currspring = springs[i];
 			Spring spring = new Spring("spring", 1, JGColor.yellow);
-			
-			
+
+
 			PhysicalObjectMass mass1 = allmasses.get(currspring[0]); 
 			PhysicalObjectMass mass2 = allmasses.get(currspring[1]);
 
@@ -238,12 +249,12 @@ public class Springies extends JGEngine
 			double restLength = Double.parseDouble(currspring[2]);
 			spring.connect(mass1, mass2, k, restLength );
 			spring.applyForce();
-			
+
 			allSprings.add(spring);
 		}
-		
+
 		return allSprings;
-		
+
 	}
 
 	public void createPhysicalElements(String filename) {
@@ -256,7 +267,7 @@ public class Springies extends JGEngine
 
 		String[][] masses = elements.createMasses(doc);
 		HashMap<String, PhysicalObjectMass> allmasses = createMasses(masses);
-		
+
 		System.out.println(masses[0][0] + "TEST");
 
 		//String [][] fmasses = elements.createFixedMasses(doc);
@@ -264,10 +275,10 @@ public class Springies extends JGEngine
 		String [][]springs = elements.createSprings(doc);
 		ArrayList<Spring> springList = createSprings(springs, allmasses);
 		ArrayList<PhysicalObjectMass> massList = new ArrayList<PhysicalObjectMass>(allmasses.values());
-		
+
 		Assembly assembly= new Assembly(massList, springList);
 		assemblies.add(assembly);
-		
+
 		//String [][] muscles = elements.createMuscles(doc);
 		//createMuscles(muscles);
 	}
@@ -283,6 +294,8 @@ public class Springies extends JGEngine
 
 		g = new Gravity(gravityvals[0], gravityvals[1]);
 		g.setAssembliesList(assemblies);
+		v = new Viscosity(viscositymagnitude);
+		v.setAssembliesList(assemblies);
 	
 	}
 
@@ -321,6 +334,19 @@ public class Springies extends JGEngine
 		temp3.applyForce();
 		
 
+		checkToggle();
+	}
+
+	private void checkToggle() {
+		if(getKey('C')) {
+			if (assemblies.size()>0) {
+				for (Assembly assembly: assemblies) {
+					assembly.remove();
+				}
+			}
+
+		}
+
 		if (getKey(KeyUp)) {
 			walls.increaseArea();
 		}
@@ -346,6 +372,10 @@ public class Springies extends JGEngine
 			clearKey('M');
 		}
 		// Just to play around with what gravity would do
+		if(VISCOSITY) {
+			v.setAssembliesList(assemblies);
+			v.applyForce();
+		}
 		if(GRAVITY){
 			g.setAssembliesList(assemblies);
 			g.applyForce();

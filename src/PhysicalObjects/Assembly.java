@@ -31,6 +31,7 @@ public class Assembly {
 	public void remove() {
 		for (PhysicalObjectMass mass : myMasses) {
 			mass.destroy();
+			
 		}
 	}
 

@@ -14,6 +14,18 @@ public class Wall extends PhysicalObjectRect {
 		setType(mytype);
 	}
 	
+	public double[] getMidPoint() {
+		Vec2 position = myBody.getPosition();
+		
+		double [] coordinate = new double[2];
+		double xpos = position.x;
+		double ypos = position.y; 
+		coordinate[0] = xpos;
+		coordinate[1] = ypos;
+		return coordinate; 
+		
+	}
+	
 	private void setType(String mytype) {
 		if(!(mytype.equals("top") || mytype.equals("bottom") || mytype.equals("right") || mytype.equals("left"))) {
 			type = "";
@@ -27,22 +39,27 @@ public class Wall extends PhysicalObjectRect {
 		if (type.equals("top")) {
 			
 			if (y >10.0) {
+
 				y--;
+
 			}
 			
 		} else if (type.equals("bottom")) {
 			if (y < 470.0) {
+
 				y++;
 			}
 			
 			
 		} else if (type.equals("right")) {
 			if (x < 843.0) {
+
 				x++; 
 			}
 			
 		} else if (type.equals("left")) {
 			if (x > 10.0) {
+
 				x--;
 			}
 			
@@ -70,6 +87,8 @@ public class Wall extends PhysicalObjectRect {
 		}
 		this.setPos(x, y);
 	}
+	
+	
 	
 	
 
