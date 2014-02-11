@@ -3,22 +3,41 @@ package PhysicalObjects;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.sun.tools.javac.util.List;
+
 import Connectors.Spring;
 
 import jgame.JGObject;
 
 public class Assembly {
-	private HashMap<String, PhysicalObjectMass> mymasses;
+	private ArrayList<PhysicalObjectMass> myMasses;
 	
-	private ArrayList<Spring> mysprings;
+	private ArrayList<Spring> mySprings;
 	
 	
-	public void Assembly(HashMap<String, PhysicalObjectMass> masses, ArrayList<Spring> springs) {
+	public Assembly( ArrayList<PhysicalObjectMass> masses, ArrayList<Spring> springs) {
 	
-		mymasses = masses;
-		mysprings = springs;
+		myMasses = masses;
+		mySprings = springs;
 		
 	}
+	
+	public ArrayList<PhysicalObjectMass> getMasses() {
+	
+		return myMasses;
+		
+	}
+	
+	public void remove() {
+		for (PhysicalObjectMass mass : myMasses) {
+			mass.destroy();
+		}
+	}
+
+
+	
+	
+	
 	
 	
 	

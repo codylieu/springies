@@ -12,8 +12,10 @@ public class Spring extends PhysicalObject implements IForce {
 	protected PhysicalObjectMass m2;
 	private double myRestLength;
 	private double myK;
+	boolean killed;
 	
 	public Spring(String name, int collisionId, JGColor color) {
+		
 		super(name, collisionId, color);
 		
 	}
@@ -23,6 +25,12 @@ public class Spring extends PhysicalObject implements IForce {
 		m2 = mass2;
 		myRestLength = restlength;
 		myK = k;
+		killed = false;
+		
+	}
+	
+	public void remove() {
+		killed = true;
 	}
 	
 	@Override
@@ -33,7 +41,9 @@ public class Spring extends PhysicalObject implements IForce {
 		double y2 = m2.y;
 		applyForce();
         myEngine.setColor(myColor);
-        myEngine.drawLine(x1, y1, x2, y2);
+        if (!killed) {
+        	myEngine.drawLine(x1, y1, x2, y2);
+        }
     }
 
 	@Override

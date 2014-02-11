@@ -18,9 +18,12 @@ import jgame.platform.JGEngine;
 
 import org.jbox2d.common.Vec2;
 
+import com.sun.tools.javac.util.List;
+
 import Connectors.Spring;
 import Forces.CenterOfMass;
 import Forces.WorldManager;
+import PhysicalObjects.Assembly;
 import PhysicalObjects.PhysicalObject;
 import PhysicalObjects.PhysicalObjectCircle;
 import PhysicalObjects.PhysicalObjectFixedMass;
@@ -47,10 +50,7 @@ public class Springies extends JGEngine
 	public Spring temp2;
 	public Spring temp3;
 	private WalledArea walls;
-	private Wall topwall;
-	private Wall bottomwall;
-	private Wall leftwall;
-	private Wall rightwall;
+	private ArrayList<Assembly> assemblies; 
 
 	static final double WALL_MARGIN = 10;
 	static final double WALL_THICKNESS = 10;
@@ -93,7 +93,8 @@ public class Springies extends JGEngine
 		//		WorldManager.getWorld().setGravity(new Vec2(0.0f, 0.1f));
 		addBall();
 		addWalls();
-
+		assemblies = new ArrayList<Assembly>();
+		
 
 		createPhysicalElements("assets/example.xml");
 
@@ -214,12 +215,14 @@ public class Springies extends JGEngine
 
 
 
-	public void createSprings(String[][] springs, HashMap<String, PhysicalObjectMass> allmasses) {
-
+	public ArrayList<Spring> createSprings(String[][] springs, HashMap<String, PhysicalObjectMass> allmasses) {
+		ArrayList<Spring> allSprings = new ArrayList<Spring>();
+		
 		for (int i = 0; i< springs.length; i++) {
 			String[] currspring = springs[i];
 			Spring spring = new Spring("spring", 1, JGColor.yellow);
-
+			
+			
 			PhysicalObjectMass mass1 = allmasses.get(currspring[0]); 
 			PhysicalObjectMass mass2 = allmasses.get(currspring[1]);
 
@@ -228,7 +231,12 @@ public class Springies extends JGEngine
 			double restLength = Double.parseDouble(currspring[2]);
 			spring.connect(mass1, mass2, 6, restLength );
 			spring.applyForce();
+			
+			allSprings.add(spring);
 		}
+		
+		return allSprings;
+		
 
 	}
 
@@ -245,16 +253,21 @@ public class Springies extends JGEngine
 
 		String[][] masses = elements.createMasses(doc);
 		HashMap<String, PhysicalObjectMass> allmasses = createMasses(masses);
-		allmasses.toString();
-
+		
+		
 		System.out.println(masses[0][0] + "TEST");
 
 
 		//String [][] fmasses = elements.createFixedMasses(doc);
 		//createFMasses(fmasses);
 		String [][]springs = elements.createSprings(doc);
-		createSprings(springs, allmasses);
-
+		ArrayList<Spring> springList = createSprings(springs, allmasses);
+		ArrayList<PhysicalObjectMass> massList = new ArrayList<PhysicalObjectMass>(allmasses.values());
+		
+		
+		Assembly assembly= new Assembly(massList, springList);
+		assemblies.add(assembly);
+		
 		//String [][] muscles = elements.createMuscles(doc);
 		//createMuscles(muscles);
 	}
