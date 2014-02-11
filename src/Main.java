@@ -26,12 +26,15 @@ public class Main
 	 */
 	public static void main (String args[]){
 		final Springies sp = new Springies();
-		JButton jb = new JButton("Make new Ball");
+		JButton jb = new JButton("Make new Assembly");
 		jb.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed (ActionEvent arg0) {
 //				sp.addBall();
-				sp.createPhysicalElements("assets/ball.xml");
+				//sp.createPhysicalElements("assets/ball.xml");
+				 String chosenFile= sp.userSelects();
+				 sp.createPhysicalElements(chosenFile);
+				
 			}
 		});
 		JFrame frame = new JFrame(TITLE);
