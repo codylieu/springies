@@ -2,7 +2,7 @@ package Forces;
 
 import java.util.ArrayList;
 
-import PhysicalObjects.PhysicalObjectMass;
+import Masses.PhysicalObjectMass;
 
 public class Gravity extends GlobalForces {
 	private double direction;

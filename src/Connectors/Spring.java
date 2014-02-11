@@ -1,8 +1,8 @@
 package Connectors;
 
 import Forces.IForce;
+import Masses.PhysicalObjectMass;
 import PhysicalObjects.PhysicalObject;
-import PhysicalObjects.PhysicalObjectMass;
 import jgame.JGColor;
 import jgame.JGObject;
 
@@ -51,9 +51,9 @@ public class Spring extends PhysicalObject implements IForce {
 
 	@Override
 	public void applyForce() {
-		totalDist = Math.sqrt(Math.pow(m2.getX()-m1.getX(), 2) + Math.pow(m2.getY()-m1.getY(), 2));
-		double xVec = m2.getX()-m1.getX(); // x vector pointing FROM mass 1 TO mass 2
-		double yVec = m2.getY()-m1.getY(); // y vector pointing FROM mass 1 TO mass 2
+		totalDist = Math.sqrt(Math.pow(m2.x-m1.x, 2) + Math.pow(m2.y-m1.y, 2));
+		double xVec = m2.x-m1.x; // x vector pointing FROM mass 1 TO mass 2
+		double yVec = m2.y-m1.y; // y vector pointing FROM mass 1 TO mass 2
 		double forceX = (myK * (totalDist - myRestLength) * xVec)/totalDist;
 		double forceY = (myK * (totalDist - myRestLength) * yVec)/totalDist;
 		m1.setForce(forceX, forceY);

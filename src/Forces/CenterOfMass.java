@@ -3,8 +3,8 @@ package Forces;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import Masses.PhysicalObjectMass;
 import PhysicalObjects.PhysicalObject;
-import PhysicalObjects.PhysicalObjectMass;
 import jgame.JGColor;
 
 public class CenterOfMass extends GlobalForces{

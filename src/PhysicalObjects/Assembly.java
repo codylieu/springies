@@ -6,7 +6,7 @@ import java.util.HashMap;
 import com.sun.tools.javac.util.List;
 
 import Connectors.Spring;
-
+import Masses.PhysicalObjectMass;
 import jgame.JGObject;
 
 public class Assembly {

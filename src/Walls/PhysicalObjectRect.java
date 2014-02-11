@@ -1,8 +1,10 @@
-package PhysicalObjects;
+package Walls;
 
 import jgame.JGColor;
 
 import org.jbox2d.collision.PolygonDef;
+
+import PhysicalObjects.PhysicalObject;
 
 
 public class PhysicalObjectRect extends PhysicalObject

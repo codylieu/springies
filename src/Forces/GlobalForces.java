@@ -5,8 +5,8 @@ import java.util.List;
 
 import jgame.JGColor;
 import Connectors.Spring;
+import Masses.PhysicalObjectMass;
 import PhysicalObjects.Assembly;
-import PhysicalObjects.PhysicalObjectMass;
 
 public abstract class GlobalForces implements IForce{
 

@@ -2,8 +2,8 @@ package Forces;
 
 import java.util.ArrayList;
 
-import PhysicalObjects.PhysicalObjectMass;
-import PhysicalObjects.WalledArea;
+import Masses.PhysicalObjectMass;
+import Walls.WalledArea;
 
 public class WallRepulsion extends GlobalForces{
 	
@@ -27,7 +27,7 @@ public class WallRepulsion extends GlobalForces{
 			ArrayList<PhysicalObjectMass> assemblyMasses = assemblies.get(i).getMasses();
 			for(int j = 0; j < assemblyMasses.size(); j++){
 				PhysicalObjectMass curMass = assemblyMasses.get(j);
-				curMass.setForce(10, 0);
+				curMass.setForce(1, 0);
 			}
 		}
 	}
@@ -37,7 +37,7 @@ public class WallRepulsion extends GlobalForces{
 			ArrayList<PhysicalObjectMass> assemblyMasses = assemblies.get(i).getMasses();
 			for(int j = 0; j < assemblyMasses.size(); j++){
 				PhysicalObjectMass curMass = assemblyMasses.get(j);
-				curMass.setForce(0, 10);
+				curMass.setForce(0, 1);
 			}
 		}
 	}
@@ -47,7 +47,7 @@ public class WallRepulsion extends GlobalForces{
 			ArrayList<PhysicalObjectMass> assemblyMasses = assemblies.get(i).getMasses();
 			for(int j = 0; j < assemblyMasses.size(); j++){
 				PhysicalObjectMass curMass = assemblyMasses.get(j);
-				curMass.setForce(-10, 0);
+				curMass.setForce(-1, 0);
 			}
 		}
 	}
@@ -57,9 +57,8 @@ public class WallRepulsion extends GlobalForces{
 			ArrayList<PhysicalObjectMass> assemblyMasses = assemblies.get(i).getMasses();
 			for(int j = 0; j < assemblyMasses.size(); j++){
 				PhysicalObjectMass curMass = assemblyMasses.get(j);
-				curMass.setForce(0, -10);
+				curMass.setForce(0, -1);
 			}
 		}
 	}
-
 }

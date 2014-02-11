@@ -1,4 +1,4 @@
-package PhysicalObjects;
+package Masses;
 
 import jgame.JGColor;
 import jgame.JGObject;
@@ -8,6 +8,7 @@ import org.jbox2d.common.Vec2;
 
 import Forces.Viscosity;
 import Forces.WorldManager;
+import PhysicalObjects.PhysicalObject;
 
 
 public class PhysicalObjectMass extends PhysicalObject
@@ -16,13 +17,6 @@ public class PhysicalObjectMass extends PhysicalObject
 	public double myMass;
 	public double myX;
 	public double myY;
-
-	public double getX(){
-		return myX;
-	}
-	public double getY(){
-		return myY;
-	}
 	
 	public PhysicalObjectMass (String id,
 			int collisionId,

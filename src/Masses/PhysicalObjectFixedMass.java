@@ -1,4 +1,4 @@
-package PhysicalObjects;
+package Masses;
 
 import org.jbox2d.collision.CircleDef;
 

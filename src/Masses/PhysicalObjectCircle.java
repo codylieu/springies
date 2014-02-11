@@ -1,8 +1,10 @@
-package PhysicalObjects;
+package Masses;
 
 import jgame.JGColor;
 
 import org.jbox2d.collision.CircleDef;
+
+import PhysicalObjects.PhysicalObject;
 
 
 public class PhysicalObjectCircle extends PhysicalObject

@@ -3,6 +3,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -10,17 +11,16 @@ import org.w3c.dom.Node;
 
 import jgame.JGColor;
 import jgame.platform.JGEngine;
-
 import Connectors.Spring;
 import Forces.CenterOfMass;
 import Forces.Gravity;
 import Forces.Viscosity;
 import Forces.WallRepulsion;
 import Forces.WorldManager;
+import Masses.PhysicalObjectMass;
 import PhysicalObjects.Assembly;
-import PhysicalObjects.PhysicalObjectMass;
-import PhysicalObjects.Wall;
-import PhysicalObjects.WalledArea;
+import Walls.Wall;
+import Walls.WalledArea;
 import parserutil.EnvironmentParser;
 import parserutil.ObjectsParser;
 
@@ -42,7 +42,6 @@ public class Springies extends JGEngine
 	private Viscosity v;
 	private CenterOfMass com;
 	private WallRepulsion wr;
-	private ArrayList<Spring> allSprings = new ArrayList<Spring>();
 
 	public Springies ()
 	{
@@ -62,9 +61,9 @@ public class Springies extends JGEngine
 		getEnvironment("assets/environment.xml");
 		WorldManager.initWorld(this);
 		assemblies = new ArrayList<Assembly>();
-//		addBall();
+		//		addBall();
 		addWalls();
-		createPhysicalElements("assets/ball.xml");
+		//		createPhysicalElements("assets/ball.xml");
 
 	}
 
@@ -76,47 +75,28 @@ public class Springies extends JGEngine
 		temp = new Spring("spring", 0, JGColor.pink);
 		temp2 = new Spring("spring", 0, JGColor.magenta);
 		temp3 = new Spring("spring", 0, JGColor.orange);
-		
-		ArrayList<Spring> tempSprings = new ArrayList<Spring>();
-		ArrayList<PhysicalObjectMass> tempMasses = new ArrayList<PhysicalObjectMass>();
-		tempSprings.add(temp);
-		tempSprings.add(temp2);
-		tempSprings.add(temp3);
-		tempMasses.add(m1);
-		tempMasses.add(m2);
-		tempMasses.add(m3);
-		
 
 		temp.connect(m1, m2, 4, 20);
 		temp2.connect(m1, m3, 4, 20);
 		temp3.connect(m2, m3, 4, 20);
-		Assembly tempAssembly = new Assembly(tempMasses, tempSprings);
-		assemblies.add(tempAssembly);
-		
 	}
 
-	private void addWalls ()
-	{
+	private void addWalls (){
+
 		final double WALL_WIDTH = displayWidth() - WALL_MARGIN * 2 + WALL_THICKNESS;
 		final double WALL_HEIGHT = displayHeight() - WALL_MARGIN * 2 + WALL_THICKNESS;
 		walls = new WalledArea("walled area", 10, JGColor.yellow);
 
-		Wall topwall = new Wall("wall", 2, JGColor.green,
-				WALL_WIDTH, WALL_THICKNESS, "top");
+		Wall topwall = new Wall("wall", 2, JGColor.green, WALL_WIDTH, WALL_THICKNESS, "top");
 		topwall.setPos(displayWidth() / 2, WALL_MARGIN);
 
-		
-		Wall bottomwall = new Wall("wall", 2, JGColor.green,
-				WALL_WIDTH, WALL_THICKNESS, "bottom");
-
+		Wall bottomwall = new Wall("wall", 2, JGColor.green, WALL_WIDTH, WALL_THICKNESS, "bottom");
 		bottomwall.setPos(displayWidth() / 2, displayHeight() - WALL_MARGIN);
 
-		Wall leftwall = new Wall("wall", 2, JGColor.green,
-				WALL_THICKNESS, WALL_HEIGHT, "left");
+		Wall leftwall = new Wall("wall", 2, JGColor.green, WALL_THICKNESS, WALL_HEIGHT, "left");
 		leftwall.setPos(WALL_MARGIN, displayHeight() / 2);
 
-		Wall rightwall = new Wall("wall", 2, JGColor.green,
-				WALL_THICKNESS, WALL_HEIGHT, "right");
+		Wall rightwall = new Wall("wall", 2, JGColor.green, WALL_THICKNESS, WALL_HEIGHT, "right");
 		rightwall.setPos(displayWidth() - WALL_MARGIN, displayHeight() / 2);
 
 		walls.setWalls(topwall, leftwall, rightwall, bottomwall);
@@ -124,8 +104,6 @@ public class Springies extends JGEngine
 
 
 	private HashMap<String, PhysicalObjectMass> implementMasses(String[][] masses) {
-
-
 		HashMap<String, PhysicalObjectMass> allmasses = new HashMap<String, PhysicalObjectMass>();
 		for (int i = 0; i< masses.length; i++) {
 			String[] currmass = masses[i];
@@ -139,12 +117,11 @@ public class Springies extends JGEngine
 			double mass = Double.parseDouble(currmass[3]);
 			double vx = Double.parseDouble(currmass[4]);
 			double vy = Double.parseDouble(currmass[5]);
-			
+
 			PhysicalObjectMass newmass = new PhysicalObjectMass(id, collisionId, color, radius, mass, x, y, vx, vy);
 
 			allmasses.put(id, newmass);
 		}
-
 		System.out.println(allmasses.toString());
 		return allmasses;
 
@@ -181,7 +158,7 @@ public class Springies extends JGEngine
 			double k = Double.parseDouble(currspring[3]);
 			double restLength = Double.parseDouble(currspring[2]);
 
-			spring.connect(mass1, mass2, 30, restLength );
+			spring.connect(mass1, mass2, k, restLength);
 
 			spring.applyForce();
 
@@ -203,7 +180,7 @@ public class Springies extends JGEngine
 		HashMap<String, PhysicalObjectMass> allmasses = this.implementMasses(masses);
 		//String [][] fmasses = elements.createFixedMasses(doc);
 		//createFMasses(fmasses);
-		
+
 		String [][]springs = elements.createSprings(doc);
 		ArrayList<Spring> springList = this.implementSprings(springs, allmasses);
 		ArrayList<PhysicalObjectMass> massList = new ArrayList<PhysicalObjectMass>(allmasses.values());
@@ -261,19 +238,37 @@ public class Springies extends JGEngine
 		WorldManager.getWorld().step(1f, 1);
 		moveObjects();
 		checkCollision(2, 1);
-//		temp.applyForce();
-//		temp2.applyForce();
-//		temp3.applyForce();
+		//		temp.applyForce();
+		//		temp2.applyForce();
+		//		temp3.applyForce();
 		checkToggle();
+		mouseDragging();
+	}
+
+	private void mouseDragging(){
+		if(getMouseButton(1)){
+			PhysicalObjectMass temp = new PhysicalObjectMass("mass", -1, JGColor.pink, 5, 10, getMouseX(), getMouseY(), 0, 0);
+			double curMin = Integer.MAX_VALUE;
+			PhysicalObjectMass minMass = null;
+			for(int i = 0; i < assemblies.size(); i++){
+				ArrayList<PhysicalObjectMass> assemblyMasses = assemblies.get(i).getMasses();
+				for(int j = 0; j < assemblyMasses.size(); j++){
+					PhysicalObjectMass curMass = assemblyMasses.get(j);
+					double dist = Math.sqrt(Math.pow(temp.myX - curMass.myX, 2) + Math.pow(temp.myY - curMass.myY, 2));
+					if(dist < curMin){
+						curMin = dist;
+						minMass = curMass;
+					}
+				}
+			}
+			Spring TEMPORARY = new Spring("spring", -1, JGColor.red);
+			TEMPORARY.connect(minMass, temp, 1, 20);
+			clearMouseButton(1);
+		}
+
 	}
 
 	private void checkToggle() {
-//		PhysicalObjectMass MASS = new PhysicalObjectMass("mass", -1, JGColor.pink, 10, 10, pfWidth()/2, pfHeight()/2, 0, 0);
-//		if(getMouseButton(1)){
-//			PhysicalObjectMass temp = new PhysicalObjectMass("mass", -1, JGColor.pink, 5, 10, getMouseX(), getMouseY(), 0, 0);
-//			Spring TEMPORARY = new Spring("spring", -1, JGColor.red);
-//			TEMPORARY.connect(MASS, temp, 4, 20);
-//		}
 		if(getKey('C')) {
 			if (assemblies.size()>0) {
 				for (Assembly assembly: assemblies) {
@@ -366,7 +361,7 @@ public class Springies extends JGEngine
 		else{
 			drawString("Wall Shrinking (down): false", 150, 100, 0, null, JGColor.white);
 		}
-		
+
 		drawString("Wall Forces:", pfWidth() - 130, 20, 0, null, JGColor.white);
 		drawString("Left Wall ('1'): " + LEFT_WALL, pfWidth() - 130, 40, 0, null, JGColor.white);
 		drawString("Top Wall ('2'): " + TOP_WALL, pfWidth() - 130, 60, 0, null, JGColor.white);

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.jbox2d.common.Vec2;
 
-import PhysicalObjects.PhysicalObjectMass;
+import Masses.PhysicalObjectMass;
 
 public class Viscosity extends GlobalForces{
 

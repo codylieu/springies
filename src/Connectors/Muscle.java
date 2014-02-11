@@ -1,6 +1,6 @@
 package Connectors;
 
-import PhysicalObjects.PhysicalObjectMass;
+import Masses.PhysicalObjectMass;
 import jgame.JGColor;
 import jgame.JGObject;
 import jgame.JGTimer;
