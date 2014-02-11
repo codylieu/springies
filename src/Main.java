@@ -18,38 +18,31 @@ import jgame.JGColor;
  */
 public class Main
 {
-	// constants
 	public static final Dimension SIZE = new Dimension(800, 600);
 	public static final String TITLE = "Springies!";
 
-
-    /**
-     * main --- where the program starts
-     * 
-     * @param args
-     */
-    public static void main (String args[])
-    {
-        // view of user's content
-        final Springies sp = new Springies();
-        JButton jb = new JButton("Make new Ball");
-        jb.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed (ActionEvent arg0) {
-                sp.addBall();
-                //sp.createPhysicalElements("assets/ball.xml");
-            }
-        });
-        // container that will work with user's OS
-        JFrame frame = new JFrame(TITLE);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // add our user interface components
-        
-        frame.getContentPane().add(sp, BorderLayout.CENTER);
-        frame.getContentPane().add(jb, BorderLayout.SOUTH);
-        // display them 
-        frame.pack();
-        frame.setVisible(true);
-    }
+	/**
+	 * main --- where the program starts
+	 * 
+	 * @param args
+	 */
+	public static void main (String args[])
+	{
+		final Springies sp = new Springies();
+		JButton jb = new JButton("Make new Ball");
+		jb.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed (ActionEvent arg0) {
+				//                sp.addBall();
+				sp.createPhysicalElements("assets/ball.xml");
+			}
+		});
+		JFrame frame = new JFrame(TITLE);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().add(sp, BorderLayout.CENTER);
+		frame.getContentPane().add(jb, BorderLayout.SOUTH);
+		frame.pack();
+		frame.setVisible(true);
+	}
 
 }

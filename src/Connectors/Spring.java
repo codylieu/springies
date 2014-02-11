@@ -15,9 +15,7 @@ public class Spring extends PhysicalObject implements IForce {
 	boolean killed;
 	
 	public Spring(String name, int collisionId, JGColor color) {
-		
 		super(name, collisionId, color);
-		
 	}
 
 	public void connect(PhysicalObjectMass mass1, PhysicalObjectMass mass2, double k, double restlength) {
@@ -26,7 +24,6 @@ public class Spring extends PhysicalObject implements IForce {
 		myRestLength = restlength;
 		myK = k;
 		killed = false;
-		
 	}
 	
 	public void remove() {
@@ -48,7 +45,6 @@ public class Spring extends PhysicalObject implements IForce {
 
 	@Override
 	public void applyForce() {
-		// TODO Auto-generated method stub
 		double totalDist = Math.sqrt(Math.pow(m2.x-m1.x, 2) + Math.pow(m2.y-m1.y, 2));
 		double xVec = m2.x-m1.x; // x vector pointing FROM mass 1 TO mass 2
 		double yVec = m2.y-m1.y; // y vector pointing FROM mass 1 TO mass 2
