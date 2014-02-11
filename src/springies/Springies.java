@@ -24,6 +24,7 @@ import Connectors.Spring;
 import Forces.CenterOfMass;
 import Forces.Gravity;
 import Forces.Viscosity;
+import Forces.WallRepulsion;
 import Forces.WorldManager;
 import PhysicalObjects.Assembly;
 import PhysicalObjects.PhysicalObject;
@@ -52,17 +53,16 @@ public class Springies extends JGEngine
 	public Spring temp3;
 	private WalledArea walls;
 	private ArrayList<Assembly> assemblies;
-	
-
 	static final double WALL_MARGIN = 10;
 	static final double WALL_THICKNESS = 10;
 	private Gravity g;
 	private Viscosity v;
 	private CenterOfMass com;
+	private WallRepulsion wr;
+	private ArrayList<Spring> allSprings = new ArrayList<Spring>();
 
 	public Springies ()
 	{
-		// set the window size
 		int height = 480;
 		double aspect = 16.0 / 9.0;
 		initEngineComponent((int) (height * aspect), height);
@@ -70,42 +70,23 @@ public class Springies extends JGEngine
 	}
 
 	@Override
-	public void initCanvas ()
-	{
-		// I have no idea what tiles do...
-		setCanvasSettings(1, // width of the canvas in tiles
-				1, // height of the canvas in tiles
-				displayWidth(), // width of one tile
-				displayHeight(), // height of one tile
-				null,// foreground colour -> use default colour white
-				null,// background colour -> use default colour black
-				null); // standard font -> use default font
+	public void initCanvas (){
+		setCanvasSettings(1, 1, displayWidth(), displayHeight(), null, null, null);
 	}
 
 	@Override
-	public void initGame ()
-	{
+	public void initGame (){
 		setFrameRate(60, 2);
-		// NOTE:
-		//   world coordinates have y pointing down
-		//   game coordinates have y pointing up
-		// so gravity is up in world coords and down in game coords
-		// so set all directions (e.g., forces, velocities) in world coords
 		getEnvironment("assets/environment.xml");
 		System.out.println("VISCOSITY MAGNITUDE: " + viscositymagnitude);
 		WorldManager.initWorld(this);
-		//		WorldManager.getWorld().setGravity(new Vec2(0.0f, 0.1f));
-		
 		assemblies = new ArrayList<Assembly>();
 //		addBall();
 		addWalls();
 		createPhysicalElements("assets/ball.xml");
 	}
 
-	public void addBall ()
-	{
-		// add a bouncy ball
-		// NOTE: you could make this into a separate class, but I'm lazy
+	public void addBall (){
 		m1 = new PhysicalObjectMass("ball", 1, JGColor.red, 10, 5, displayWidth()/2, displayHeight()/2,0,0);
 		m2 = new PhysicalObjectMass("ball2", 1, JGColor.yellow, 10, 5, displayWidth()/2-100, displayHeight()/2-100, 0,0);
 		m3 = new PhysicalObjectMass("ball3", 1, JGColor.blue, 10, 5, displayWidth()/2-200, displayHeight()/2, 0, 0);
@@ -133,9 +114,6 @@ public class Springies extends JGEngine
 
 	private void addWalls ()
 	{
-		// add walls to bounce off of
-		// NOTE: immovable objects must have no mass
-
 		final double WALL_WIDTH = displayWidth() - WALL_MARGIN * 2 + WALL_THICKNESS;
 		final double WALL_HEIGHT = displayHeight() - WALL_MARGIN * 2 + WALL_THICKNESS;
 		walls = new WalledArea("walled area", 10, JGColor.yellow);
@@ -150,21 +128,14 @@ public class Springies extends JGEngine
 
 		bottomwall.setPos(displayWidth() / 2, displayHeight() - WALL_MARGIN);
 
-		
-		
-
 		Wall leftwall = new Wall("wall", 2, JGColor.green,
 				WALL_THICKNESS, WALL_HEIGHT, "left");
 		leftwall.setPos(WALL_MARGIN, displayHeight() / 2);
-
-		
 
 		Wall rightwall = new Wall("wall", 2, JGColor.green,
 				WALL_THICKNESS, WALL_HEIGHT, "right");
 		rightwall.setPos(displayWidth() - WALL_MARGIN, displayHeight() / 2);
 
-		 
-		
 		walls.setWalls(topwall, leftwall, rightwall, bottomwall);
 	}
 
@@ -185,14 +156,10 @@ public class Springies extends JGEngine
 			double vy = Double.parseDouble(currmass[5]);
 			System.out.println("creatednewmass");
 			PhysicalObjectMass newmass = new PhysicalObjectMass(id, collisionId, color, radius, mass, x, y, vx, vy);
-			
 			allmasses.put(id, newmass);
-
 		}
-
 		System.out.println(allmasses.toString());
-		return allmasses; 
-
+		return allmasses;
 	}
 
 	public double[] averageLocation(HashMap<String, PhysicalObjectMass> allmasses) {
@@ -200,7 +167,6 @@ public class Springies extends JGEngine
 
 		double totalx = 0;
 		double totaly = 0 ;
-
 
 		for (Map.Entry entry : allmasses.entrySet()) {
 			PhysicalObjectMass currmass = (PhysicalObjectMass) entry.getValue();
@@ -211,23 +177,19 @@ public class Springies extends JGEngine
 		}
 		location[0] = totalx;
 		location[1] = totaly; 
-		return location; 
-
-
+		return location;
 	}
 
 	public ArrayList<Spring> implementSprings(String[][] springs, HashMap<String, PhysicalObjectMass> allmasses) {
-		ArrayList<Spring> allSprings = new ArrayList<Spring>();
+//		ArrayList<Spring> allSprings = new ArrayList<Spring>();
 
 		for (int i = 0; i< springs.length; i++) {
 			String[] currspring = springs[i];
 			Spring spring = new Spring("spring", 1, JGColor.yellow);
 
-
 			PhysicalObjectMass mass1 = allmasses.get(currspring[0]); 
 			PhysicalObjectMass mass2 = allmasses.get(currspring[1]);
 
-			//System.out.println("connected " + currspring[0] + " " +currspring[1]);
 			double k = Double.parseDouble(currspring[3]);
 			double restLength = Double.parseDouble(currspring[2]);
 			spring.connect(mass1, mass2, k, restLength);
@@ -243,15 +205,12 @@ public class Springies extends JGEngine
 	public void createPhysicalElements(String filename) {
 
 		ObjectsParser elements = new ObjectsParser();
-		//Node doc = elements.parse("assets/ball.xml");
 		System.out.println(filename);
 		Node doc = elements.parse(filename);
 		System.out.println(doc.toString());
 
 		String[][] masses = elements.createMasses(doc);
 		HashMap<String, PhysicalObjectMass> allmasses = this.implementMasses(masses);
-
-		//System.out.println(masses[0][0] + "TEST");
 
 		//String [][] fmasses = elements.createFixedMasses(doc);
 		//createFMasses(fmasses);
@@ -268,23 +227,19 @@ public class Springies extends JGEngine
 	}
 
 	public void getEnvironment(String filename) {
-
 		EnvironmentParser environment = new EnvironmentParser();
 		Node environ = environment.parse(filename);
 		gravityvals = environment.getGravity(environ);
 		viscositymagnitude = environment.getViscosity(environ);
 		centermass = environment.getCenterMass(environ);
 		wallvals = environment.getWalls(environ);
-
 		g = new Gravity(gravityvals[0], gravityvals[1]);
 		g.setAssembliesList(assemblies);
 		v = new Viscosity(viscositymagnitude);
 		v.setAssembliesList(assemblies);
 		com = new CenterOfMass(centermass[0], centermass[1]);
 		com.setAssembliesList(assemblies);
-	
 	}
-
 
 	private String userSelects() {
 		JFileChooser chooser = new JFileChooser();
@@ -299,36 +254,42 @@ public class Springies extends JGEngine
 			return pathofFile;
 		}
 		return "";
-
 	}
 
 	boolean GRAVITY = false;
 	boolean VISCOSITY = false;
 	boolean CENTER_OF_MASS = false;
+	boolean MOUSE = false;
+	boolean LEFT_WALL = false;
+	boolean TOP_WALL = false;
+	boolean RIGHT_WALL = false;
+	boolean BOTTOM_WALL = false;
 
 	@Override
 	public void doFrame ()
 	{
-		// update game objects
 		WorldManager.getWorld().step(1f, 1);
 		moveObjects();
 		checkCollision(2, 1);
 //		temp.applyForce();
 //		temp2.applyForce();
 //		temp3.applyForce();
-		
-
 		checkToggle();
 	}
 
 	private void checkToggle() {
+//		PhysicalObjectMass MASS = new PhysicalObjectMass("mass", -1, JGColor.pink, 10, 10, pfWidth()/2, pfHeight()/2, 0, 0);
+//		if(getMouseButton(1)){
+//			PhysicalObjectMass temp = new PhysicalObjectMass("mass", -1, JGColor.pink, 5, 10, getMouseX(), getMouseY(), 0, 0);
+//			Spring TEMPORARY = new Spring("spring", -1, JGColor.red);
+//			TEMPORARY.connect(MASS, temp, 4, 20);
+//		}
 		if(getKey('C')) {
 			if (assemblies.size()>0) {
 				for (Assembly assembly: assemblies) {
 					assembly.remove();
 				}
 			}
-
 		}
 
 		if (getKey(KeyUp)) {
@@ -342,7 +303,6 @@ public class Springies extends JGEngine
 			String chosenFile= userSelects();
 			createPhysicalElements(chosenFile);
 		}
-
 		if(getKey('G')){
 			GRAVITY = !GRAVITY;
 			clearKey('G');
@@ -367,6 +327,36 @@ public class Springies extends JGEngine
 			com.setAssembliesList(assemblies);
 			com.applyForce();
 		}
+		if(getKey('1')){
+			LEFT_WALL = !LEFT_WALL;
+			clearKey('1');
+		}
+		if(getKey('2')){
+			TOP_WALL = !TOP_WALL;
+			clearKey('2');
+		}
+		if(getKey('3')){
+			RIGHT_WALL = !RIGHT_WALL;
+			clearKey('3');
+		}
+		if(getKey('4')){
+			BOTTOM_WALL = !BOTTOM_WALL;
+			clearKey('4');
+		}
+		wr = new WallRepulsion(1, 10000, 1);
+		wr.setAssembliesList(assemblies);
+		if(LEFT_WALL){
+			wr.leftWallForce();
+		}
+		if(TOP_WALL){
+			wr.topWallForce();
+		}
+		if(RIGHT_WALL){
+			wr.rightWallForce();
+		}
+		if(BOTTOM_WALL){
+			wr.bottomWallForce();
+		}
 	}
 
 	@Override
@@ -386,5 +376,11 @@ public class Springies extends JGEngine
 		else{
 			drawString("Wall Shrinking (down): false", 150, 100, 0, null, JGColor.white);
 		}
+		
+		drawString("Wall Forces:", pfWidth() - 130, 20, 0, null, JGColor.white);
+		drawString("Left Wall ('1'): " + LEFT_WALL, pfWidth() - 130, 40, 0, null, JGColor.white);
+		drawString("Top Wall ('2'): " + TOP_WALL, pfWidth() - 130, 60, 0, null, JGColor.white);
+		drawString("Right Wall ('3'): " + RIGHT_WALL, pfWidth() - 130, 80, 0, null, JGColor.white);
+		drawString("Bottom Wall ('4'): " + BOTTOM_WALL, pfWidth() - 130, 100, 0, null, JGColor.white);
 	}
 }

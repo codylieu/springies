@@ -13,6 +13,7 @@ public class Spring extends PhysicalObject implements IForce {
 	private double myRestLength;
 	private double myK;
 	boolean killed;
+	private double totalDist = myRestLength;
 	
 	public Spring(String name, int collisionId, JGColor color) {
 		super(name, collisionId, color);
@@ -37,7 +38,12 @@ public class Spring extends PhysicalObject implements IForce {
 		double x2 = m2.x;
 		double y2 = m2.y;
 		applyForce();
-        myEngine.setColor(myColor);
+		if(totalDist >= myRestLength){
+			myEngine.setColor(JGColor.blue);
+		}
+		else{
+			myEngine.setColor(JGColor.pink);
+		}
         if (!killed) {
         	myEngine.drawLine(x1, y1, x2, y2);
         }
@@ -45,9 +51,9 @@ public class Spring extends PhysicalObject implements IForce {
 
 	@Override
 	public void applyForce() {
-		double totalDist = Math.sqrt(Math.pow(m2.x-m1.x, 2) + Math.pow(m2.y-m1.y, 2));
-		double xVec = m2.x-m1.x; // x vector pointing FROM mass 1 TO mass 2
-		double yVec = m2.y-m1.y; // y vector pointing FROM mass 1 TO mass 2
+		totalDist = Math.sqrt(Math.pow(m2.getX()-m1.getX(), 2) + Math.pow(m2.getY()-m1.getY(), 2));
+		double xVec = m2.getX()-m1.getX(); // x vector pointing FROM mass 1 TO mass 2
+		double yVec = m2.getY()-m1.getY(); // y vector pointing FROM mass 1 TO mass 2
 		double forceX = (myK * (totalDist - myRestLength) * xVec)/totalDist;
 		double forceY = (myK * (totalDist - myRestLength) * yVec)/totalDist;
 		m1.setForce(forceX, forceY);

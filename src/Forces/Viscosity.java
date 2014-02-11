@@ -23,8 +23,7 @@ public class Viscosity extends GlobalForces{
 				Vec2 linearVelocity = curMass.getVelocity();
 				linearVelocity.x *= magnitude;
 				linearVelocity.y *= magnitude;
-			
-				curMass.setSpeed(linearVelocity.x, linearVelocity.y);
+				curMass.setForce(-linearVelocity.x, -linearVelocity.y);
 			}
 		}
 	}

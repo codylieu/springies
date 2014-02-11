@@ -17,9 +17,7 @@ public class WalledArea extends PhysicalObject {
 	private HashMap<Wall, ArrayList<Double>> positions;
 	
 	public WalledArea(String name, int collisionId, JGColor color) {
-		
 		super(name, collisionId, color);
-
 	}
 	
 	public HashMap<Wall, double[]> getPositions() {

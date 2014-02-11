@@ -17,6 +17,13 @@ public class PhysicalObjectMass extends PhysicalObject
 	public double myX;
 	public double myY;
 
+	public double getX(){
+		return myX;
+	}
+	public double getY(){
+		return myY;
+	}
+	
 	public PhysicalObjectMass (String id,
 			int collisionId,
 			JGColor color,
