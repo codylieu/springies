@@ -4,17 +4,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
 import org.w3c.dom.Node;
-import jboxGlue.Wall;
-import jboxGlue.WalledArea;
+
 import jgame.*;
 import jgame.platform.*;
 import jgame.JGColor;
 import jgame.JGObject;
 import jgame.platform.JGEngine;
+
 import org.jbox2d.common.Vec2;
+
 import Connectors.Spring;
 import Forces.CenterOfMass;
 import Forces.WorldManager;
@@ -23,6 +26,8 @@ import PhysicalObjects.PhysicalObjectCircle;
 import PhysicalObjects.PhysicalObjectFixedMass;
 import PhysicalObjects.PhysicalObjectMass;
 import PhysicalObjects.PhysicalObjectRect;
+import PhysicalObjects.Wall;
+import PhysicalObjects.WalledArea;
 import parserutil.EnvironmentParser;
 import parserutil.ObjectsParser;
 
@@ -46,10 +51,10 @@ public class Springies extends JGEngine
 	private Wall bottomwall;
 	private Wall leftwall;
 	private Wall rightwall;
-	
+
 	static final double WALL_MARGIN = 10;
 	static final double WALL_THICKNESS = 10;
-	
+
 
 	public Springies ()
 	{
@@ -85,7 +90,7 @@ public class Springies extends JGEngine
 		getEnvironment("assets/environment.xml");
 		System.out.println("VISCOSITY MAGNITUDE: " + viscositymagnitude);
 		WorldManager.initWorld(this);
-//		WorldManager.getWorld().setGravity(new Vec2(0.0f, 0.1f));
+		//		WorldManager.getWorld().setGravity(new Vec2(0.0f, 0.1f));
 		addBall();
 		addWalls();
 
@@ -120,36 +125,36 @@ public class Springies extends JGEngine
 	{
 		// add walls to bounce off of
 		// NOTE: immovable objects must have no mass
-		
+
 		final double WALL_WIDTH = displayWidth() - WALL_MARGIN * 2 + WALL_THICKNESS;
 		final double WALL_HEIGHT = displayHeight() - WALL_MARGIN * 2 + WALL_THICKNESS;
 		walls = new WalledArea("walled area", 10, JGColor.yellow);
-		
+
 		Wall topwall = new Wall("wall", 2, JGColor.green,
 				WALL_WIDTH, WALL_THICKNESS, "top");
 		topwall.setPos(displayWidth() / 2, WALL_MARGIN);
-		
+
 		System.out.println("TOP WALL IS AT " + displayWidth()/2 + "," +  WALL_MARGIN);
-		
+
 		Wall bottomwall = new Wall("wall", 2, JGColor.green,
 				WALL_WIDTH, WALL_THICKNESS, "bottom");
-		
+
 		bottomwall.setPos(displayWidth() / 2, displayHeight() - WALL_MARGIN);
-		
+
 		double bottomwallx = displayHeight() - WALL_MARGIN;
-		
+
 		System.out.println("BOTTOM WALL IS AT " + displayWidth()/2 + "," + bottomwallx);
-		
+
 		Wall leftwall = new Wall("wall", 2, JGColor.green,
 				WALL_THICKNESS, WALL_HEIGHT, "left");
 		leftwall.setPos(WALL_MARGIN, displayHeight() / 2);
-		
+
 		System.out.println("LEFT WALL IS AT " + WALL_MARGIN + "," + displayHeight());
-		
+
 		Wall rightwall = new Wall("wall", 2, JGColor.green,
 				WALL_THICKNESS, WALL_HEIGHT, "right");
 		rightwall.setPos(displayWidth() - WALL_MARGIN, displayHeight() / 2);
-		
+
 		double rightwallx = displayWidth() - WALL_MARGIN; 
 		System.out.println("RIGHT WALL IS AT " + rightwallx + "," + displayHeight()/2);
 		walls.setWalls(topwall, leftwall, rightwall, bottomwall);
@@ -179,8 +184,8 @@ public class Springies extends JGEngine
 
 		}
 
-//		CenterOfMass com = new CenterOfMass("com", 5, JGColor.green);
-//		com.setCOMForce(allmasses);
+		//		CenterOfMass com = new CenterOfMass("com", 5, JGColor.green);
+		//		com.setCOMForce(allmasses);
 		System.out.println(allmasses.toString());
 		return allmasses; 
 
@@ -269,25 +274,27 @@ public class Springies extends JGEngine
 	private String userSelects() {
 		JFileChooser chooser = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
-		    "XML Files", "xml");
+				"XML Files", "xml");
 		chooser.setFileFilter(filter);
 		int returnVal = chooser.showOpenDialog(getParent());
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 			File chosenFile = chooser.getSelectedFile();
 			String pathofFile = chosenFile.getAbsolutePath();
-			
-		    System.out.println("You chose to open this file: " + pathofFile);
-		        
-		    return pathofFile;
+
+			System.out.println("You chose to open this file: " + pathofFile);
+
+			return pathofFile;
 		}
 		return "";
-		
-		
+
+
 	}
-	
+
 
 
 	boolean FAKE_GRAVITY = false;
+	boolean VISCOSITY = false;
+	boolean CENTER_OF_MASS = false;
 
 	@Override
 	public void doFrame ()
@@ -299,42 +306,70 @@ public class Springies extends JGEngine
 		temp.applyForce();
 		temp2.applyForce();
 		temp3.applyForce();
-		
+
 
 		if (getKey(KeyUp)) {
 			walls.increaseArea();
-			
+
 		}
-	
-		
+
+
 		if (getKey(KeyDown)) {
 			walls.reduceArea();
-			
+
 		}
 		if (getKey('N')) {
 			String chosenFile= userSelects();
 			createPhysicalElements(chosenFile);
 		}
-		
+
 
 		if(getKey('G')){
 			FAKE_GRAVITY = !FAKE_GRAVITY;
 			clearKey('G');
 		}
+		if(getKey('V')){
+			VISCOSITY = !VISCOSITY;
+			clearKey('V');
+		}
+		if(getKey('M')){
+			CENTER_OF_MASS = !CENTER_OF_MASS;
+			clearKey('M');
+		}
+		// Just to play around with what gravity would do
 		if(FAKE_GRAVITY){
 			m1.setForce(0, 500);
 			m2.setForce(0, 500);
 			m3.setForce(0, 500);
 		}
+		
+		
+		
 
 
 	}
 
 
 	@Override
-	public void paintFrame ()
-	{
+	public void paintFrame (){
 		// nothing to do
 		// the objects paint themselves
+		drawString("Gravity ('g'): " + FAKE_GRAVITY, 100, 20, 0, null, JGColor.white);
+		drawString("Viscosity ('v'): " + VISCOSITY, 110, 40, 0, null, JGColor.white);
+		drawString("Center of Mass ('m'): " + CENTER_OF_MASS, 140, 60, 0, null, JGColor.white);
+		if(getKey(KeyUp)){
+			drawString("Wall Expanding (up): true", 145, 80, 0, null, JGColor.white);
+		}
+		else{
+			drawString("Wall Expanding (up): false", 145, 80, 0, null, JGColor.white);
+		}
+		if(getKey(KeyDown)){
+			drawString("Wall Shrinking (down): true", 150, 100, 0, null, JGColor.white);
+		}
+		else{
+			drawString("Wall Shrinking (down): false", 150, 100, 0, null, JGColor.white);
+		}
+
+
 	}
 }

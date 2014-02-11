@@ -1,9 +1,1 @@
-Moving mass extends fixed mass
-
-Make a separate class for Gravity
-
-Have variables held in the class
-
-Have it so that setForce calculates force for the sum of all forces
-
-No public instance variables
+Fixed mass extends moving mass
