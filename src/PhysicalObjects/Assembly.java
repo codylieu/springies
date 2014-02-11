@@ -14,8 +14,13 @@ public class Assembly {
 	
 	
 	public void Assembly(HashMap<String, PhysicalObjectMass> masses, ArrayList<Spring> springs) {
+	
+		mymasses = masses;
+		mysprings = springs;
 		
 	}
+	
+	
 	
 	
 	
