@@ -125,7 +125,6 @@ public class Springies extends JGEngine
 
 	private HashMap<String, PhysicalObjectMass> implementMasses(String[][] masses) {
 
-
 		HashMap<String, PhysicalObjectMass> allmasses = new HashMap<String, PhysicalObjectMass>();
 		for (int i = 0; i< masses.length; i++) {
 			String[] currmass = masses[i];
@@ -145,28 +144,11 @@ public class Springies extends JGEngine
 			allmasses.put(id, newmass);
 		}
 
-		System.out.println(allmasses.toString());
-		return allmasses;
+	
+		return allmasses; 
 
 	}
 
-	public double[] averageLocation(HashMap<String, PhysicalObjectMass> allmasses) {
-		double[] location = new double[2];
-
-		double totalx = 0;
-		double totaly = 0 ;
-
-		for (Map.Entry entry : allmasses.entrySet()) {
-			PhysicalObjectMass currmass = (PhysicalObjectMass) entry.getValue();
-			totalx += currmass.myX;
-			totaly += currmass.myY;
-			System.out.print("key,val: ");
-			System.out.println(entry.getKey() + "," + entry.getValue());
-		}
-		location[0] = totalx;
-		location[1] = totaly; 
-		return location;
-	}
 
 	private ArrayList<Spring> implementSprings(String[][] springs, HashMap<String, PhysicalObjectMass> allmasses) {
 		ArrayList<Spring> allSprings = new ArrayList<Spring>();
