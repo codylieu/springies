@@ -105,7 +105,6 @@ public class Springies extends JGEngine
 	{
 		// add a bouncy ball
 		// NOTE: you could make this into a separate class, but I'm lazy
-		
 		m1 = new PhysicalObjectMass("ball", 1, JGColor.red, 10, 5, displayWidth()/2, displayHeight()/2,0,0);
 		m2 = new PhysicalObjectMass("ball2", 1, JGColor.yellow, 10, 5, displayWidth()/2-100, displayHeight()/2-100, 0,0);
 		m3 = new PhysicalObjectMass("ball3", 1, JGColor.blue, 10, 5, displayWidth()/2-200, displayHeight()/2, 0, 0);
@@ -129,9 +128,6 @@ public class Springies extends JGEngine
 		temp3.connect(m2, m3, 4, 20);
 		Assembly tempAssembly = new Assembly(tempMasses, tempSprings);
 		assemblies.add(tempAssembly);
-		
-		
-
 	}
 
 	private void addWalls ()
@@ -309,8 +305,6 @@ public class Springies extends JGEngine
 
 	}
 
-
-
 	boolean GRAVITY = false;
 	boolean VISCOSITY = false;
 	boolean CENTER_OF_MASS = false;
@@ -329,12 +323,10 @@ public class Springies extends JGEngine
 
 		if (getKey(KeyUp)) {
 			walls.increaseArea();
-
 		}
 
 		if (getKey(KeyDown)) {
 			walls.reduceArea();
-
 		}
 		if (getKey('N')) {
 			String chosenFile= userSelects();
@@ -342,7 +334,7 @@ public class Springies extends JGEngine
 		}
 
 		if(getKey('G')){
-			FAKE_GRAVITY = !FAKE_GRAVITY;
+			GRAVITY = !GRAVITY;
 			clearKey('G');
 		}
 		if(getKey('V')){
@@ -354,13 +346,9 @@ public class Springies extends JGEngine
 			clearKey('M');
 		}
 		// Just to play around with what gravity would do
-		if(FAKE_GRAVITY){
-			/*m1.setForce(0, 500);
-			m2.setForce(0, 500);
-			m3.setForce(0, 500);*/
+		if(GRAVITY){
 			g.setAssembliesList(assemblies);
 			g.applyForce();
-			
 		}
 	}
 
@@ -369,7 +357,7 @@ public class Springies extends JGEngine
 	public void paintFrame (){
 		// nothing to do
 		// the objects paint themselves
-		drawString("Gravity ('g'): " + FAKE_GRAVITY, 100, 20, 0, null, JGColor.white);
+		drawString("Gravity ('g'): " + GRAVITY, 100, 20, 0, null, JGColor.white);
 		drawString("Viscosity ('v'): " + VISCOSITY, 110, 40, 0, null, JGColor.white);
 		drawString("Center of Mass ('m'): " + CENTER_OF_MASS, 140, 60, 0, null, JGColor.white);
 		if(getKey(KeyUp)){
