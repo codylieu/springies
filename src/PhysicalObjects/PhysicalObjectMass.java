@@ -45,15 +45,6 @@ public class PhysicalObjectMass extends PhysicalObject
 		init(radius, mass, x, y, vx, vy);
 	}
 
-	public Vec2 getVelocity() {
-		Vec2 velocity = myBody.getLinearVelocity();
-		return velocity;
-	}
-
-//	private void initViscosity(){
-//		myBody.setLinearVelocity(Viscosity.setViscosity(this, 0.8));
-//	}
-
 	public void move(){
 		// if the JGame object was deleted, remove the physical object too
 		if (myBody.m_world != WorldManager.getWorld()) {
@@ -65,14 +56,13 @@ public class PhysicalObjectMass extends PhysicalObject
 		x = position.x;
 		y = position.y;
 		myRotation = -myBody.getAngle();
-//		initViscosity();
 	}
 
 	private void init (double radius, double mass, double x, double y, double vx, double vy)
 	{
 		// save arguments
-		myRadius = radius;
-		myMass = mass;
+		myRadius = 10;
+		myMass = 5;
 		myX = x;
 		myY = y;
 		int intRadius = (int)radius;
